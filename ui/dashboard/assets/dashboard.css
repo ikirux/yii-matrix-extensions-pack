@@ -1,0 +1,175 @@
+.aligncenter {
+    text-align: center;
+}
+.header h2 {
+    color: #777777;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1;
+    margin: 20px 0 30px;
+}
+.quick-menu {
+    text-align: center;
+}
+.list-unstyled {
+    list-style: none outside none;
+    padding-left: 0;
+}
+.quick-menu li {
+    display: inline-block;
+    width: 140px;
+}
+.dashboard-group .quick-menu li.blue a i, .dashboard-group .quick-menu li.primary a i {
+    background-color: #15AAFF;
+}
+.dashboard-group .quick-menu li.red a i, .dashboard-group .quick-menu li.danger a i {
+    background-color: #EA4519;
+}
+.dashboard-group .quick-menu li.inverse a i {
+    background-color: #333333;
+}
+.dashboard-group .quick-menu li.green a i, .dashboard-group .quick-menu li.success a i {
+    background-color: #4FA950;
+}
+.dashboard-group .quick-menu li.yellow a i, .dashboard-group .quick-menu li.warning a i {
+    background-color: #EF9E2A;
+}
+.dashboard-group .quick-menu li.lite-blue a i, .dashboard-group .quick-menu li.info a i {
+    background-color: #6AB2EE;
+}
+.dashboard-group .quick-menu li a i {
+    background: none repeat scroll 0 0 #333333;
+    border-radius: 5px 5px 0 0;
+    color: #FFFFFF;
+    display: block;
+    font-size: 36px;
+    padding: 44px 40px;
+    width: 125px;
+}
+.dashboard-group .quick-menu li a span {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 5px 5px;
+    color: #777777;
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding: 10px 0;
+    text-transform: uppercase;
+    transition: background-color 0.3s linear 0s;
+    width: 125px;
+}
+.dashboard-group .quick-menu li a {
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.3s linear 0s;
+}
+a {
+    color: #15AAFF;
+}
+.dashboard-group .quick-menu {
+  text-align: center;
+}
+.dashboard-group .quick-menu li {
+  display: inline-block;
+  width: 140px;
+}
+.dashboard-group .quick-menu li a {
+  display: block;
+  text-decoration: none;
+  -webkit-transition: background-color 0.3s linear;
+  -moz-transition: background-color 0.3s linear;
+  -ms-transition: background-color 0.3s linear;
+  -o-transition: background-color 0.3s linear;
+  transition: background-color 0.3s linear;
+}
+.dashboard-group .quick-menu li a i {
+  background: #333333;
+  color: #fff;
+  display: block;
+  font-size: 36px;
+  padding: 44px 40px;
+  width: 125px;
+  border-radius: 5px 5px 0 0;
+  -webkit-border-radius: 5px 5px 0 0;
+}
+.dashboard-group .quick-menu li a span {
+  background: rgba(0, 0, 0, 0.05);
+  color: #777;
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  padding: 10px 0;
+  text-transform: uppercase;
+  width: 125px;
+  border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  -webkit-transition: background-color 0.3s linear;
+  -moz-transition: background-color 0.3s linear;
+  -ms-transition: background-color 0.3s linear;
+  -o-transition: background-color 0.3s linear;
+  transition: background-color 0.3s linear;
+}
+.dashboard-group .quick-menu li a:hover {
+  -webkit-transition: background-color 0.3s linear;
+  -moz-transition: background-color 0.3s linear;
+  -ms-transition: background-color 0.3s linear;
+  -o-transition: background-color 0.3s linear;
+  transition: background-color 0.3s linear;
+}
+.dashboard-group .quick-menu li a:hover span {
+  background-color: #333333;
+  color: #fff;
+  -webkit-transition: background-color 0.3s linear;
+  -moz-transition: background-color 0.3s linear;
+  -ms-transition: background-color 0.3s linear;
+  -o-transition: background-color 0.3s linear;
+  transition: background-color 0.3s linear;
+}
+.dashboard-group .quick-menu li.blue a i,
+.dashboard-group .quick-menu li.primary a i {
+  background-color: #15aaff;
+}
+.dashboard-group .quick-menu li.blue a:hover span,
+.dashboard-group .quick-menu li.primary a:hover span {
+  background-color: #15aaff;
+}
+.dashboard-group .quick-menu li.red a i,
+.dashboard-group .quick-menu li.danger a i {
+  background-color: #ea4519;
+}
+.dashboard-group .quick-menu li.red a:hover span,
+.dashboard-group .quick-menu li.danger a:hover span {
+  background-color: #ea4519;
+}
+.dashboard-group .quick-menu li.yellow a i,
+.dashboard-group .quick-menu li.warning a i {
+  background-color: #ef9e2a;
+}
+.dashboard-group .quick-menu li.yellow a:hover span,
+.dashboard-group .quick-menu li.warning a:hover span {
+  background-color: #ef9e2a;
+}
+.dashboard-group .quick-menu li.green a i,
+.dashboard-group .quick-menu li.success a i {
+  background-color: #4fa950;
+}
+.dashboard-group .quick-menu li.green a:hover span,
+.dashboard-group .quick-menu li.success a:hover span {
+  background-color: #4fa950;
+}
+.dashboard-group .quick-menu li.lite-blue a i,
+.dashboard-group .quick-menu li.info a i {
+  background-color: #6ab2ee;
+}
+.dashboard-group .quick-menu li.lite-blue a:hover span,
+.dashboard-group .quick-menu li.info a:hover span {
+  background-color: #6ab2ee;
+}
+.dashboard-group .quick-menu li.inverse a i {
+  background-color: #333333;
+}
+.dashboard-group .quick-menu li.inverse a:hover span {
+  background-color: #333333;
+}
