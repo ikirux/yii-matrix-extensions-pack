@@ -89,7 +89,7 @@ class DashBoard extends CWidget
         echo CHtml::closeTag('div');
 
         // Register css
-        $assetsPath = Yii::getPathOfAlias('ext.ui.dashboard.assets');
+        $assetsPath = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'assets';
         $assetsUrl = Yii::app()->assetManager->publish($assetsPath, false, -1, false);   
         $cs = Yii::app()->getClientScript();
         $cssFilename = YII_DEBUG ? 'dashboard.css' : 'dashboard.min.css';
