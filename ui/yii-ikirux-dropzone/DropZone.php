@@ -64,11 +64,11 @@ class Dropzone extends CWidget {
         }
             
         $options = CMap::mergeArray([
-                'url' => $this->url,
-                'parallelUploads' => 1,
-                'paramName' => $this->name,
-                'init' => "js:function(){this.on('success',function(file){{$this->onSuccess}});}"
-                ], $this->options);
+            'url' => $this->url,
+            'parallelUploads' => 1,
+            'paramName' => $this->name,
+            'init' => "js:function(){this.on('success',function(file){{$this->onSuccess}});}"
+        ], $this->options);
 
         $this->registerClientScript($options);
     }
