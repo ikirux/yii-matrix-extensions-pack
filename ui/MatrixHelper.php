@@ -11,7 +11,6 @@ class MatrixHelper extends CHtml
 {
     public static function buildCountryItems()
     {
-
         $sql = "SELECT l.name, l.code, cc.code FROM `{{Language}}` l LEFT JOIN `{{CountryCode}}` cc ON (country_code_id = cc.id)";
         $dataReader = Yii::app()->db->createCommand($sql)->query();
         $dataReader->bindColumn(1, $name);
