@@ -32,16 +32,6 @@ class EMultiSelect extends CJuiWidget
     public $dividerLocation = 0.6;
 
     /**
-     * Run not used...
-     *
-     * @return void
-     */
-    function run()
-    {
-        
-    }
-
-    /**
      * Initializes everything
      *
      * @return void
@@ -60,49 +50,27 @@ class EMultiSelect extends CJuiWidget
     protected function registerScripts()
     {
         parent::registerCoreScripts();
-        $basePath = dirname(__FILE__ ) . DIRECTORY_SEPARATOR .'_assets';
+        $basePath = dirname(__FILE__ ) . DIRECTORY_SEPARATOR . 'assets';
         $baseUrl = Yii::app()->getAssetManager()->publish($basePath);
 
-        $cs=Yii::app()->getClientScript();
-        $cs->registerCssFile($baseUrl . '/' . 'ui.multiselect.css');
+        $cs = Yii::app()->getClientScript();
+        $cs->registerCssFile($baseUrl . DIRECTORY_SEPARATOR . 'ui.multiselect.css');
 
         $this->scriptUrl=$baseUrl;
-        $this->registerScriptFile('ui.multiselect.js');
+        $this->registerScriptFile($baseUrl . DIRECTORY_SEPARATOR . 'ui.multiselect.js');
 
-        $params = array();
-        if ($this->sortable) {
-            $params[] = "sortable:true";
-        } else {
-            $params[] = "sortable:false";
-        }
-
-        if ($this->searchable) {
-            $params[] = "searchable:true";
-        } else {
-            $params[] = "searchable:false";
-        }
-
-        if ($this->height) {
-            $params[] = "height:" . $this->height;
-        } else {
-            $params[] = "height:false";
-        }        
-
-        if ($this->width) {
-            $params[] = "width:" . $this->width;
-        } else {
-            $params[] = "width:false";
-        }
-
+        $params = [];
+        $params[] = $this->sortable ? "sortable:true" : "sortable:false";
+        $params[] = $this->searchable ? "searchable:true" : "searchable:false";
+        $params[] = $this->height ? "height:" . $this->height : "height:false";
+        $params[] = $this->width ? "width:" . $this->width : "width:false";                
         $params[] = "dividerLocation:" . $this->dividerLocation;
 
-        $parameters = '{' .implode(',', $params). '}';
+        $parameters = '{' . implode(',', $params) . '}';
         Yii::app()->clientScript->registerScript(
             'EMultiSelect',
-            '$(".multiselect").multiselect('. $parameters .');',
+            '$(".multiselect").multiselect(' . $parameters . ');',
             CClientScript::POS_READY
         );
-
     }
 }
-?>
