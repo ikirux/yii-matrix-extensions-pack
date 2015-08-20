@@ -59,7 +59,7 @@ class TimePicker extends CInputWidget
         list($name, $id) = $this->resolveNameID();
 
         // Prepare script package.
-        $this->package = array_merge(array(
+        $this->package = array_merge([
             'baseUrl' => $this->getAssetsUrl(),
             'js' => [
                 YII_DEBUG ? 'js/bootstrap-timepicker.js' : 'js/bootstrap-timepicker.min.js',
@@ -70,7 +70,7 @@ class TimePicker extends CInputWidget
             'depends' => [
                 'jquery',
             ],
-        ), $this->package);
+        ], $this->package);
 
         $clientScript = Yii::app()->getClientScript();
         $options = CJavaScript::encode($this->options);
