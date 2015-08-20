@@ -109,7 +109,7 @@ class DatePickerControl extends CInputWidget
 	 */
 	public function registerClientScript($id)
 	{
-		$baseScriptUrl = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('ven.ikirux.yii-matrix-extensions-pack.ui.yii-bootstrap3-datepicker.assets'));
+		$baseScriptUrl = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'assets');
 
 		$cs = Yii::app()->getClientScript();
 		$cs->registerCssFile($baseScriptUrl . '/css/datepicker3.css');
