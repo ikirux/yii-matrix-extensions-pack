@@ -54,22 +54,22 @@ class TypeAhead extends CInputWidget
         $typeaheadBundle =  YII_DEBUG ? 'typeahead.bundle.js' : 'typeahead.bundle.min.js';
         $typeaheadJquery =  YII_DEBUG ? 'typeahead.jquery.js' : 'typeahead.jquery.min.js';
 
-        $assetsPath = Yii::getPathOfAlias('ext.ui.typeahead-bootstrap3.assets');
+        $assetsPath = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'assets';
         $assetsUrl = Yii::app()->assetManager->publish($assetsPath, false, -1, false);
         
-        $cs->registerCssFile($assetsUrl.'/css/typeahead.css');
+        $cs->registerCssFile($assetsUrl . '/css/typeahead.css');
         
-        $cs->registerScriptFile($assetsUrl.'/js/'.$bloodhound, CClientScript::POS_HEAD);
-        $cs->registerScriptFile($assetsUrl.'/js/'.$typeaheadBundle, CClientScript::POS_HEAD);
-        $cs->registerScriptFile($assetsUrl.'/js/'.$typeaheadJquery, CClientScript::POS_HEAD);
+        $cs->registerScriptFile($assetsUrl . '/js/' . $bloodhound, CClientScript::POS_HEAD);
+        $cs->registerScriptFile($assetsUrl . '/js/' . $typeaheadBundle, CClientScript::POS_HEAD);
+        $cs->registerScriptFile($assetsUrl . '/js/' . $typeaheadJquery, CClientScript::POS_HEAD);
                 
         $url = explode('/', Yii::app()->request->url);
         array_pop($url);
-        $urlForAction = implode('/',$url);
+        $urlForAction = implode('/', $url);
        
         $relatedModel = key($this->related);
         $relatedAttribute = current($this->related);
-        $route = $urlForAction.'/' . $this->action . '?model='.$relatedModel.'&attribute='.$relatedAttribute.'&query=%QUERY&limit='.$this->limit;
+        $route = $urlForAction . '/' . $this->action . '?model=' . $relatedModel . '&attribute=' . $relatedAttribute . '&query=%QUERY&limit=' . $this->limit;
 
         $eventsCustomScript = [];
         foreach($this->customEvents as $event => $expression) {
@@ -84,23 +84,23 @@ class TypeAhead extends CInputWidget
         $eventsScript = implode("\n", $eventsScript);
 
         $script = "var contentMotor = new Bloodhound({
-        	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('".$relatedAttribute."'),
+        	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('" . $relatedAttribute . "'),
         	queryTokenizer: Bloodhound.tokenizers.whitespace,
-        	limit: ".$this->limit.",
-        	remote: {url: '".$route."'}
+        	limit: " . $this->limit . ",
+        	remote: {url: '" . $route . "'}
         });		
         		
         contentMotor.initialize();
-        $('#".$id."').typeahead({ highlight: true, minLength: ".$this->minLength." }, {
+        $('#" . $id . "').typeahead({ highlight: true, minLength: " . $this->minLength . " }, {
         	name: 'json-search',
-        	displayKey: '".$relatedAttribute."',
-        	limit: ".$this->limit.",
+        	displayKey: '" . $relatedAttribute . "',
+        	limit: " . $this->limit . ",
         	source: contentMotor.ttAdapter()
         })
         $eventsCustomScript
         $eventsScript";
         
-        $cs->registerScript("def-typeAhead".$this->attribute, $script,CClientScript::POS_END);
+        $cs->registerScript("def-typeAhead" . $this->attribute, $script, CClientScript::POS_END);
     }
 
 }
