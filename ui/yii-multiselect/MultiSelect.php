@@ -24,6 +24,11 @@ class MultiSelect extends CInputWidget
     public $package = [];
 
     /**
+    * @var array
+    */
+    public $data = [];
+
+    /**
     * Init widget.
     */
     public function init()
@@ -39,13 +44,12 @@ class MultiSelect extends CInputWidget
             }            
         }
         
+        $nameDropDownList = CHtml::activeName($this->model, $this->attribute . '[]');
         $classErrorDiv = ($error = $this->model->getError($this->attribute)) ? 'has-error' : '' ;
         echo CHtml::tag('div', ['class' => 'form-group ' . $classErrorDiv], false, false);
         echo CHtml::activeLabel($this->model, $this->attribute, ['class' => 'control-label', 'required' => $required]);
-        echo CHtml::tag('div', [], false, false);
-        echo CHtml::activeDropDownList($this->model, $this->attribute, ['class' => 'form-control']);
+        echo CHtml::activeDropDownList($this->model, $this->attribute, $this->data, ['name' => $nameDropDownList, 'multiple' => 'multiple']);
         if (!empty($classErrorDiv)) { echo CHtml::tag('p', ['class' => 'help-block'], $error); }
-        echo CHtml::closeTag('div');
         echo CHtml::closeTag('div');
         $this->registerClientScript();
     }
