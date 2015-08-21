@@ -15,15 +15,15 @@ class arrayNumber extends CValidator
 	    $array = $object->$attribute;
 	    
 	    if (!$this->allowEmpty && empty($array)) {
-	    	$this->addError($object, $attribute, 'El atributo no puede ser vacio');
+	    	$this->addError($object, $attribute, $object->getAttributeLabel($attribute) . ' no puede ser vacio');
 	    } else {
 		    // Primero verificamos que el atributo sea un arreglo
 		    if (!is_array($array)) {
-				$this->addError($object, $attribute, $attribute . ' no contiene códigos válidos');
+				$this->addError($object, $attribute, $object->getAttributeLabel($attribute) . ' no contiene códigos válidos');
 		    } else {
 				foreach ($array as $element) {
 				    if (!is_numeric($element)) {
-						$this->addError($object, $attribute, $attribute . 'no contiene códigos válidos');
+						$this->addError($object, $attribute, $object->getAttributeLabel($attribute) . ' no contiene códigos válidos');
 						break;
 				    }			    
 				}
