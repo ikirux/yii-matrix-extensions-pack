@@ -330,7 +330,7 @@ class XTabularInput extends CWidget
 			dataType: 'html'
 		});
 	});
-	$("#{$this->id} .{$this->removeCssClass}").live("click", function(event) {
+	$("#{$this->id}").on("click", ".{$this->removeCssClass}", function(event) {
 		event.preventDefault();
 		$(this).parents(".{$this->inputCssClass}:first").remove();
 		$('.{$this->inputContainerCssClass}').filter(function(){return $.trim($(this).text())==='' && $(this).children().length == 0}).siblings('.{$this->headerCssClass}').hide();
