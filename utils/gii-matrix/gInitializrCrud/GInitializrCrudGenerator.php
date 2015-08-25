@@ -11,5 +11,5 @@ Yii::import('gii.generators.crud.CrudGenerator');
 
 class GInitializrCrudGenerator extends CrudGenerator
 {
-    public $codeModel = 'application.vendor.ikirux.gii-matrix.gInitializrCrud.GInitializrCrudCode';
+    public $codeModel = 'application.vendor.ikirux.yii-matrix-extensions-pack.utils.gii-matrix.gInitializrCrud.GInitializrCrudCode';
 }

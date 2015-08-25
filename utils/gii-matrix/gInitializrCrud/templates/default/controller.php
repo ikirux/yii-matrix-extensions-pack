@@ -47,7 +47,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
     {
         return [
             'upload' => [
-                'class' => 'ext.actions.MatrixUploadAction',
+                'class' => 'matrixAssets.actions.MatrixUploadAction',
                 'path' => Yii::app()->getBasePath() . "/../uploads/tmp/<?php echo $this->tableSchema->name; ?>",
                 'publicPath' => "/../uploads/final/<?php echo $this->tableSchema->name; ?>",
                 'formClass' => '<?php echo $this->modelClass; ?>',
@@ -60,7 +60,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 	public function behaviors()
 	{
 		return [
-			'rutBehavior' => ['class' => 'ext.behaviors.RutBehavior']
+			'rutBehavior' => ['class' => 'matrixAssets.behaviors.RutBehavior']
      	];
 	}
 
