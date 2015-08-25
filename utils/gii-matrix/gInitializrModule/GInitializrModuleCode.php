@@ -31,12 +31,12 @@ class GInitializrModuleCode extends CCodeModel
 EOD;
 		$code=<<<EOD
 <?php
-return array(
-    'modules'=>array(
+return [
+    'modules' => [
         '{$this->moduleID}',
-    ),
+    ],
     ......
-);
+];
 EOD;
 
 		return $output.highlight_string($code,true);

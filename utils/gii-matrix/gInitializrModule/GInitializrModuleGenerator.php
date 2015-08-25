@@ -2,8 +2,8 @@
 
 class GInitializrModuleGenerator extends CCodeGenerator
 {
-	public $codeModel = 'application.vendor.ikirux.gii-matrix.gInitializrModule.GInitializrModuleCode';
-
+	public $codeModel = 'application.vendor.ikirux.yii-matrix-extensions-pack.utils.gii-matrix.gInitializrModule.GInitializrModuleCode';
+    
     protected function afterAction($action)
     {
     	// Se deben generar las operaciones del modulo auth
