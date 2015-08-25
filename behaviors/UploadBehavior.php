@@ -108,11 +108,13 @@ class UploadBehavior extends CActiveRecordBehavior {
 					if (!@unlink(Yii::app()->getBasePath() . $this->owner->$field)) {
 						Yii::log("I couldn't delete " . $this->owner->$field, CLogger::LEVEL_WARNING);
 						//prevent real deletion
-        				$event->isValid = false;
+        				return false;
 					}    				
     			}
     		}
     	}
+
+    	return parent::beforeDelete();
     }
 
 	protected function beforeUpload($event, $temporalFile)
