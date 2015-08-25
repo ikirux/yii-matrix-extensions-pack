@@ -49,7 +49,7 @@ $arrBehaviors = [];
  * The followings are the available model relations:
 <?php foreach($relations as $name=>$relation): ?>
  * @property <?php
-	if (preg_match("~^array\(self::([^,]+), '([^']+)', '([^']+)'\)$~", $relation, $matches))
+	if (preg_match("~^\[self::([^,]+), '([^']+)', '([^']+)'\]$~", $relation, $matches))		
     {
         $relationType = $matches[1];
         $relationModel = $matches[2];

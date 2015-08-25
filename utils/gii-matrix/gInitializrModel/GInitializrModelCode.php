@@ -131,7 +131,7 @@ class GInitializrModelCode extends ModelCode
 		}
 
 		if ($ruts !== []) {
-			$rules[] = "['" . implode(', ', $ruts) . "', 'ext.validators.Rut']";
+			$rules[] = "['" . implode(', ', $ruts) . "', 'matrixAssets.validators.Rut']";
 		}
 		
 		if ($safe !== []) {
@@ -145,7 +145,7 @@ class GInitializrModelCode extends ModelCode
 		if ($uploads !== []) {
 			// Each uploadinf file can set its own allow_type
 			foreach ($uploads as $key => $upload) {
-				$rules[] = "['" . $upload . "', 'ext.validators.uploadFile', 'allowType' => " . $uploads_type[$key] . ", 'on' => 'uploadingFile']";
+				$rules[] = "['" . $upload . "', 'matrixAssets.validators.uploadFile', 'allowType' => " . $uploads_type[$key] . ", 'on' => 'uploadingFile']";
 			}			
 		}
 
@@ -229,11 +229,11 @@ class GInitializrModelCode extends ModelCode
 		switch ($type) {
 			case self::BEHAVIOR_DATE:
 				return "\t\t\t'datetimeI18NBehavior' => [
-				'class' => 'ext.behaviors.i18n-datetime-behavior.DateTimeI18NBehavior'
+				'class' => 'matrixAssets.behaviors.DateTimeI18NBehavior'
 			],\n";
 			case self::BEHAVIOR_AUDIT:
 				return "\t\t\t'AuditBehavior' => [
-				'class' => 'ext.behaviors.AuditBehavior',
+				'class' => 'matrixAssets.behaviors.AuditBehavior',
 				'createAttribute' => 'create_time',
 				'createUser' => 'create_user_id',
 				'updateAttribute' => 'update_time',
@@ -241,7 +241,7 @@ class GInitializrModelCode extends ModelCode
 			],\n";
 			case self::BEHAVIOR_UPLOAD:
 				return "\t\t\t'UploadBehavior' => [
-				'class' => 'ext.behaviors.UploadBehavior',
+				'class' => 'matrixAssets.behaviors.UploadBehavior',
 			],";
 		}
 	}

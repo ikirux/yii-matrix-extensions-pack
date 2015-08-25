@@ -16,7 +16,7 @@
  */
 class GInitializrModelGenerator extends CCodeGenerator {
 
-	public $codeModel = 'application.vendor.ikirux.gii-matrix.gInitializrModel.GInitializrModelCode';
+	public $codeModel = 'application.vendor.ikirux.yii-matrix-extensions-pack.utils.gii-matrix.gInitializrModel.GInitializrModelCode';
 
 	/**
 	 * Returns the table names in an array.
