@@ -114,7 +114,7 @@ class UploadBehavior extends CActiveRecordBehavior {
     		}
     	}
 
-    	return parent::beforeDelete();
+    	return parent::beforeDelete($event);
     }
 
 	protected function beforeUpload($event, $temporalFile)
