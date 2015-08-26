@@ -197,7 +197,7 @@ class GInitializrCrudCode extends CrudCode
                 <?php endif; ?>        
             <?php endif; ?>
 
-            <?php $this->widget(\'ext.ui.yii-ikirux-dropzone.DropZone\', [
+            <?php $this->widget(\'matrixAssets.ui.yii-ikirux-dropzone.DropZone\', [
                 \'url\' => Yii::app()->createUrl(\'' . $this->class2id($modelClass) . '/upload\', [
                     \'fileNameAttribute\' => \'up_' . $field . '\',
                     \'fileInternalAttribute\' => \'up_machine_' . $field . '\',
