@@ -77,7 +77,6 @@ class ConfigMatrixCommand extends CConsoleCommand
 
 		echo "Cargando estructura base de la base de datos... ";
 		shell_exec('php yiic migrate --interactive=0');
-		shell_exec('php yiic migrate --migrationPath=user.migrations --interactive=0');
 		echo "Ok\n";
 
 		do {
