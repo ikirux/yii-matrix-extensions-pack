@@ -13,28 +13,25 @@
 class DashBoard extends CWidget
 {
     // Types
-    const TYPE_DANGER = 1;
-    const TYPE_PRIMARY = 2;    
-    const TYPE_INVERSE = 3; 
-    const TYPE_SUCCESS = 4; 
-    const TYPE_WARNING = 5; 
-    const TYPE_INFO = 6; 
+    const TYPE_RED = 1;
+    const TYPE_BLUE = 2;    
+    const TYPE_BLACK = 3; 
+    const TYPE_GREEN = 4; 
+    const TYPE_YELLOW = 5; 
+    const TYPE_LITE_BLUE = 6; 
 
     /**
     * List of social services to use.
     * Buttons will be generated in the order specified here.
-    * Valid types are:
-    * self::TYPE_DANGER, self::TYPE_PRIMARY and self::TYPE_INVERSE
-    * self::TYPE_SUCCESS, self::TYPE_WARNING and self::TYPE_INFO    
     * @var array
     */
     public $types = [
-        self::TYPE_DANGER => 'red danger',
-        self::TYPE_PRIMARY => 'blue primary',
-        self::TYPE_INVERSE => 'inverse',
-        self::TYPE_SUCCESS => 'green success',
-        self::TYPE_WARNING => 'yellow warning',
-        self::TYPE_INFO => 'lite-blue info',   
+        self::TYPE_RED => 'red danger',
+        self::TYPE_BLUE => 'blue primary',
+        self::TYPE_BLACK => 'inverse',
+        self::TYPE_GREEN => 'green success',
+        self::TYPE_YELLOW => 'yellow warning',
+        self::TYPE_LITE_BLUE => 'lite-blue info',   
     ];
 
     /**
@@ -74,7 +71,7 @@ class DashBoard extends CWidget
             $visible = (isset($element['visible'])) ? $element['visible'] : true;
 
             if ($visible) {
-                $type = (isset($this->types[$element['type']])) ? $this->types[$element['type']] : $this->types[self::TYPE_DANGER];
+                $type = (isset($this->types[$element['type']])) ? $this->types[$element['type']] : $this->types[self::TYPE_RED];
 
                 echo CHtml::openTag('li', ['class' => $type]);
                 echo CHtml::openTag('a', ['href' => $element['url']]);
