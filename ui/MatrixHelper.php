@@ -21,10 +21,10 @@ class MatrixHelper extends CHtml
         $items = [];
         while ($dataReader->read() !== false) {
             if (Yii::app()->language == $codeLanguage) {
-        	    $currentCodeFlag = $codeCountry;
+                $currentCodeFlag = $codeCountry;
             } else {
                 $items[] = [
-                    'icon' => "flag-icon flag-icon-$codeCountry",
+                    'icon' => "glyphicon flag-icon flag-icon-$codeCountry",
                     'class' => 'bootstrap.widgets.BsNav',
                     'type' => 'navbar',
                     'label' => $name,
@@ -39,7 +39,7 @@ class MatrixHelper extends CHtml
             'activateParents' => true,
             'items' => [
                 [
-                    'icon' => "flag-icon flag-icon-$currentCodeFlag",
+                    'icon' => "glyphicon flag-icon flag-icon-$currentCodeFlag",
                     'class' => 'bootstrap.widgets.BsNav',
                     'type' => 'navbar',
                     'activateParents' => true,
