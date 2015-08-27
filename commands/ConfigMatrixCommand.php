@@ -102,6 +102,9 @@ class ConfigMatrixCommand extends CConsoleCommand
     		IndexIgnore */*
     		RewriteEngine on
 
+            # New directive needed in Apache 2.4.3:
+            Require all granted
+
     		# if a directory or a file exists, use it directly
     		RewriteCond %{REQUEST_FILENAME} !-f
     		RewriteCond %{REQUEST_FILENAME} !-d
