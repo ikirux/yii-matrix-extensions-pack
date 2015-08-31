@@ -18,13 +18,13 @@ $nameColumn = $this->guessNameColumn($this->tableSchema->columns);
 
 if ($this->messageSupport):
 echo "\$this->breadcrumbs = [
-	Yii::t('default', \$this->pluralTitle) => ['index'],
-	\$model->{$nameColumn},
+    Yii::t('default', \$this->pluralTitle) => ['index'],
+    \$model->{$nameColumn},
 ];\n";
 else:
 echo "\$this->breadcrumbs = [
-	\$this->pluralTitle => ['index'],
-	\$model->{$nameColumn},
+    \$this->pluralTitle => ['index'],
+    \$model->{$nameColumn},
 ];\n";
 endif;
 ?>
@@ -32,16 +32,16 @@ endif;
 <?php if ($this->messageSupport): ?>
 $this->menu = [
     ['icon' => 'glyphicon glyphicon-list', 'label' => Yii::t('default', 'Listar ' . $this->singularTitle), 'url' => ['index'], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.index")],
-	['icon' => 'glyphicon glyphicon-plus-sign', 'label' => Yii::t('default', 'Crear ' . $this->singularTitle), 'url' => ['create'], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.create")],
-	['icon' => 'glyphicon glyphicon-edit', 'label' => Yii::t('default', 'Actualizar ' . $this->singularTitle), 'url' => ['update', 'id'=>$model-><?php echo $this->tableSchema->primaryKey; ?>], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.update")],
-	['icon' => 'glyphicon glyphicon-minus-sign', 'label' => Yii::t('default', 'Borrar ' . $this->singularTitle), 'url' => '#', 'linkOptions' => ['submit'=> ['delete', 'id' => $model-><?php echo $this->tableSchema->primaryKey; ?>], 'confirm' => Yii::t('default', 'Está seguro que desea borrar este elemento?')], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.delete")],
+    ['icon' => 'glyphicon glyphicon-plus-sign', 'label' => Yii::t('default', 'Crear ' . $this->singularTitle), 'url' => ['create'], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.create")],
+    ['icon' => 'glyphicon glyphicon-edit', 'label' => Yii::t('default', 'Actualizar ' . $this->singularTitle), 'url' => ['update', 'id'=>$model-><?php echo $this->tableSchema->primaryKey; ?>], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.update")],
+    ['icon' => 'glyphicon glyphicon-minus-sign', 'label' => Yii::t('default', 'Borrar ' . $this->singularTitle), 'url' => '#', 'linkOptions' => ['submit'=> ['delete', 'id' => $model-><?php echo $this->tableSchema->primaryKey; ?>], 'confirm' => Yii::t('default', 'Está seguro que desea borrar este elemento?')], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.delete")],
 ];
 <?php else: ?>
 $this->menu = [
     ['icon' => 'glyphicon glyphicon-list', 'label' => 'Listar ' . $this->singularTitle, 'url' => ['index'], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.index")],
-	['icon' => 'glyphicon glyphicon-plus-sign', 'label' => 'Crear ' . $this->singularTitle, 'url' => ['create'], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.create")],
-	['icon' => 'glyphicon glyphicon-edit', 'label' => 'Actualizar ' . $this->singularTitle, 'url' => ['update', 'id'=>$model-><?php echo $this->tableSchema->primaryKey; ?>], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.update")],
-	['icon' => 'glyphicon glyphicon-minus-sign', 'label' => 'Borrar ' . $this->singularTitle, 'url' => '#', 'linkOptions' => ['submit'=> ['delete', 'id' => $model-><?php echo $this->tableSchema->primaryKey; ?>], 'confirm' => 'Está seguro que desea borrar este elemento?'], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.delete")],
+    ['icon' => 'glyphicon glyphicon-plus-sign', 'label' => 'Crear ' . $this->singularTitle, 'url' => ['create'], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.create")],
+    ['icon' => 'glyphicon glyphicon-edit', 'label' => 'Actualizar ' . $this->singularTitle, 'url' => ['update', 'id'=>$model-><?php echo $this->tableSchema->primaryKey; ?>], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.update")],
+    ['icon' => 'glyphicon glyphicon-minus-sign', 'label' => 'Borrar ' . $this->singularTitle, 'url' => '#', 'linkOptions' => ['submit'=> ['delete', 'id' => $model-><?php echo $this->tableSchema->primaryKey; ?>], 'confirm' => 'Está seguro que desea borrar este elemento?'], 'visible' => Yii::app()->user->checkAccess("<?= $opTemplate ?>.delete")],
 ];
 <?php endif; ?>
 <?php if ($this->submenu) {
@@ -55,11 +55,11 @@ $this->menu = [
 <?php echo "<?php echo BsHtml::pageHeader('Ver ' . \$this->singularTitle); ?>\n"; ?>    
 <?php endif; ?>
 <?php echo "<?php"; ?> $this->widget('zii.widgets.CDetailView', [
-	'htmlOptions' => [
-		'class' => 'table table-striped table-condensed table-hover',
-	],
-	'data' => $model,
-	'attributes' => [
+    'htmlOptions' => [
+        'class' => 'table table-striped table-condensed table-hover',
+    ],
+    'data' => $model,
+    'attributes' => [
 <?php
 foreach ($this->tableSchema->columns as $column) {
     // Nos saltamos los campos de auditoria
@@ -69,11 +69,11 @@ foreach ($this->tableSchema->columns as $column) {
         $column->name == $this->updateUser
     ) {
         continue;
-    }  	
+    }   
 
     // Revisa si hay un modelo relacionado con el atributo nombre
     if ($relationName = $this->hasKeyAttributeRelated($column->name)) {
-    	echo "\t\t[\n";
+        echo "\t\t[\n";
         echo "\t\t\t'name' => '$column->name',\n";
         echo "\t\t\t'type' => 'raw',\n";
         echo "\t\t\t'value' => \$model->" . $relationName . "->nombre,\n";
@@ -101,9 +101,9 @@ foreach ($this->tableSchema->columns as $column) {
         ],\n";
         }        
     } elseif (strpos($column->name, "up_machine") === false) {
-    	echo "\t\t'" . $column->name . "',\n";
+        echo "\t\t'" . $column->name . "',\n";
     }    
 }
 ?>
-	],
+    ],
 ]); ?>

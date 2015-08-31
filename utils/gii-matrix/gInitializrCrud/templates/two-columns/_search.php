@@ -40,7 +40,7 @@ define('_TABS_SEARCH_', 3);
 <?php   if ($this->existModel($foreignModel)): ?>
 <?= $this->generateActiveControlGroup($this->modelClass, $column, _TABS_SEARCH_, $foreignModel) . "\n"; ?>
 <?php   else: ?>
-<?= $this->generateEmptyList($column, _TABS_SEARCH_) . "\n"; ?>
+<?= $this->generateEmptyList($column, _TABS_SEARCH_) . "\n"; ?>            
 <?php   endif; ?>
 <?php else: ?>
 <?= $this->generateActiveControlGroup($this->modelClass, $column, _TABS_SEARCH_) . "\n"; ?>

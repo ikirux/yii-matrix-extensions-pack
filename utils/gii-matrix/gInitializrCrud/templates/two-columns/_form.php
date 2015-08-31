@@ -3,7 +3,24 @@
  * The following variables are available in this template:
  * - $this: the BootstrapCode object
  */
-define('_TABS_FORM_', 2);
+
+// Primero contamos las columnas y descontando las que no generan controles
+$sumaColumnas = 0;
+$elementosPorColumna = 0;
+foreach ($this->tableSchema->columns as $column) {
+    // Nos saltamos los campos de auditoria
+    if (!($column->autoIncrement ||
+        $column->name == $this->createAttribute ||
+        $column->name == $this->createUser ||
+        $column->name == $this->updateAttribute ||
+        $column->name == $this->updateUser ||
+        strpos($column->name, "up_machine") !== false)
+    ) {
+        $sumaColumnas++;
+    }
+}
+$elementosPorColumna = round($sumaColumnas / 2);
+define('_TABS_FORM_', 3);
 ?>
 <?php echo "<?php\n"; ?>
 /* @var $this <?php echo $this->getControllerClass(); ?> */
@@ -23,11 +40,12 @@ define('_TABS_FORM_', 2);
     <p class="help-block"><?= '<?= Yii::t(\'default\', \'Campos con\'); ?>' ?> <span class="required">*</span> <?= '<?= Yii::t(\'default\', \'son requeridos.\'); ?>' ?></p>
 <?php else: ?>
     <p class="help-block">Campos con <span class="required">*</span> son requeridos.</p>
-<?php endif; ?>    
-    <div class="col-lg-5">
-        <?php echo "<?= \$form->errorSummary(\$model); ?>\n"; ?>
+<?php endif; ?> 
+    <?php echo "<?= \$form->errorSummary(\$model); ?>\n"; ?>
 
+    <div class="row">
 <?php
+$id_columna = 0;
 foreach ($this->tableSchema->columns as $column) :
     if ($column->autoIncrement) {
         continue;
@@ -42,6 +60,14 @@ foreach ($this->tableSchema->columns as $column) :
         continue;
     }    
 
+    if ($id_columna == 0) {
+        echo "\t\t<div class=\"col-md-5\">\n";
+    } elseif ($id_columna == $elementosPorColumna) {
+        echo "\t\t</div>
+        <div class=\"col-md-5\">\n";
+    }
+
+    $id_columna++;
     ?>
 <?php if ($column->dbType === 'date'): ?>
 <?= $this->generateDateControlGroup($column, _TABS_FORM_) . "\n"; ?>
@@ -52,16 +78,21 @@ foreach ($this->tableSchema->columns as $column) :
 <?php   if ($this->existModel($foreignModel)): ?>
 <?= $this->generateActiveControlGroup($this->modelClass, $column, _TABS_FORM_, $foreignModel) . "\n"; ?>
 <?php   else: ?>
-<?= $this->generateEmptyList($column, _TABS_FORM_) . "\n"; ?>   
+<?= $this->generateEmptyList($column, _TABS_FORM_) . "\n"; ?>
 <?php   endif; ?>
 <?php elseif (strpos($column->name, "up_machine") === false): ?>
 <?= $this->generateActiveControlGroup($this->modelClass, $column, _TABS_FORM_) . "\n"; ?>
 <?php endif; ?>
 <?php endforeach; ?>
-<?php if ($this->messageSupport): ?>
-        <?php echo "<?= BsHtml::submitButton(Yii::t('default', 'Guardar'), ['color' => BsHtml::BUTTON_COLOR_PRIMARY]); ?>\n"; ?>
-<?php else: ?>
-        <?php echo "<?= BsHtml::submitButton('Guardar', ['color' => BsHtml::BUTTON_COLOR_PRIMARY]); ?>\n"; ?>    
-<?php endif; ?>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-md-3">
+<?php if ($this->messageSupport): ?>
+            <?php echo "<?= BsHtml::submitButton(Yii::t('default', 'Guardar'), ['color' => BsHtml::BUTTON_COLOR_PRIMARY]); ?>"; ?>
+<?php else: ?>
+            <?php echo "<?= BsHtml::submitButton('Guardar', ['color' => BsHtml::BUTTON_COLOR_PRIMARY]); ?>"; ?>    
+<?php endif; ?>
+        </div>
+    </div>      
 <?php echo "<?php \$this->endWidget(); ?>\n"; ?>

@@ -54,13 +54,16 @@ class GInitializrCrudCode extends CrudCode
      */    
     public $submenu_path = '/default/_menu';        
 
-    public function generateControlGroup($modelClass, $column)
+    public function generateControlGroup($modelClass, $column, $tabs = 0)
     {
+        $html = "";        
         if ($column->type === 'boolean') {
-            return "BsHtml::activeCheckBoxControlGroup(\$model, '{$column->name}')";
+            $html =            
+"_TAB_<?= BsHtml::activeCheckBoxControlGroup(\$model, '{$column->name}'); ?>";
         } else {
             if (stripos($column->dbType, 'text') !== false) {
-                return "BsHtml::activeTextAreaControlGroup(\$model, '{$column->name}', ['rows' => 6])";
+                $html =                
+"_TAB_<?= BsHtml::activeTextAreaControlGroup(\$model, '{$column->name}', ['rows' => 6]); ?>";
             } else {
                 if (preg_match('/^(password|pass|passwd|passcode)$/i', $column->name)) {
                     $inputField = 'activePasswordControlGroup';
@@ -69,34 +72,36 @@ class GInitializrCrudCode extends CrudCode
                 }
 
                 if ($column->type !== 'string' || $column->size === null) {
-                    return "BsHtml::{$inputField}(\$model, '{$column->name}')";
+                    $html =                    
+"_TAB_<?= BsHtml::{$inputField}(\$model, '{$column->name}'); ?>";
                 } else {
                     if (($size = $maxLength = $column->size) > 60) {
                         $size = 60;
                     }
-                    return "BsHtml::{$inputField}(\$model, '{$column->name}', ['size' => $size, 'maxlength' => $maxLength])";
+                    $html =                    
+"_TAB_<?= BsHtml::{$inputField}(\$model, '{$column->name}', ['size' => $size, 'maxlength' => $maxLength]); ?>";
                 }
             }
         }
+
+        return $this->indent($html, $tabs);        
     }
 
-    public function generateActiveControlGroup($modelClass, $column, $view = '', $foreignModel = false)
+    public function generateActiveControlGroup($modelClass, $column, $tabs = 0, $foreignModel = false)
     {
-        if ($foreignModel != false && $view == 'search') {
-            return "\$form->dropDownListControlGroup(\$model, '{$column->name}', $foreignModel::model()->getOptionList(), [
-                'prompt' => \$this->getPrompt(),
-            ])";
-        } elseif ($foreignModel != false && $view == 'form') {
-            return "\$form->dropDownListControlGroup(\$model, '{$column->name}', $foreignModel::model()->getOptionList(), [
-            'prompt' => \$this->getPrompt(),
-        ])";
-        }
-
-        if ($column->type === 'boolean') {
-            return "\$form->checkBoxControlGroup(\$model, '{$column->name}')";
+        $html = "";
+        if ($foreignModel != false) {
+            $html =
+"_TAB_<?= \$form->dropDownListControlGroup(\$model, '{$column->name}', $foreignModel::model()->getOptionList(), [
+_TAB_    'prompt' => \$this->getPrompt(),
+_TAB_]); ?>";
+        } elseif ($column->type === 'boolean') {
+            $html =            
+"_TAB_<?= \$form->checkBoxControlGroup(\$model, '{$column->name}'); ?>";
         } else {
             if (stripos($column->dbType, 'text') !== false) {
-                return "\$form->textAreaControlGroup(\$model, '{$column->name}', ['rows' => 6])";
+                $html =                
+"_TAB_<?= \$form->textAreaControlGroup(\$model, '{$column->name}', ['rows' => 6]); ?>";
             } else {
                 if (preg_match('/^(password|pass|passwd|passcode)$/i', $column->name)) {
                     $inputField = 'passwordFieldControlGroup';
@@ -105,67 +110,52 @@ class GInitializrCrudCode extends CrudCode
                 }
 
                 if ($column->type !== 'string' || $column->size === null) {
-                    return "\$form->{$inputField}(\$model, '{$column->name}')";
+                    $html =                    
+"_TAB_<?= \$form->{$inputField}(\$model, '{$column->name}'); ?>";
                 } else {
                     // search y form tienen distintas identaciones
-                    if ($column->name == 'rut' && $view == 'search') {
+                    if ($column->name == 'rut') {
                         if ($this->messageSupport) {
-                            return "\$form->{$inputField}(\$model, '{$column->name}', [
-        'maxlength' => $column->size, 
-        'help' => Yii::t('default', 'Ingresar rut sin puntos ni guión')
-    ])";
+                            $html =                            
+"_TAB_<?= \$form->{$inputField}(\$model, '{$column->name}', [
+_TAB_    'maxlength' => $column->size, 
+_TAB_    'help' => Yii::t('default', 'Ingresar rut sin puntos ni guión')
+_TAB_]); ?>";
                         } else {
-                            return "\$form->{$inputField}(\$model, '{$column->name}', [
-        'maxlength' => $column->size, 
-        'help' => 'Ingresar rut sin puntos ni guión'
-    ])";
-                        }
-                    } elseif($column->name == 'rut' && $view == 'form') {
-                        if ($this->messageSupport) {
-                    return "\$form->{$inputField}(\$model, '{$column->name}', [
-            'maxlength' => $column->size, 
-            'help' => 'Ingresar rut sin puntos ni guión'
-        ])";
-                        } else {
-                    return "\$form->{$inputField}(\$model, '{$column->name}', [
-            'maxlength' => $column->size, 
-            'help' => Yii::t('default', 'Ingresar rut sin puntos ni guión') 
-        ])";
+                            $html =                            
+"_TAB_<?= \$form->{$inputField}(\$model, '{$column->name}', [
+_TAB_    'maxlength' => $column->size, 
+_TAB_    'help' => 'Ingresar rut sin puntos ni guión'
+_TAB_]); ?>";
                         }
                     } else {
-                    return "\$form->{$inputField}(\$model, '{$column->name}', ['maxlength' => $column->size])";    
+                        $html = 
+"_TAB_<?= \$form->{$inputField}(\$model, '{$column->name}', ['maxlength' => $column->size]); ?>";    
                     }                    
                 }
             }
         }
+
+        return $this->indent($html, $tabs);
     }
 
-    public function generateDateControlGroup($modelClass, $column, $view = '')
+    public function generateDateControlGroup($column, $tabs = 0)
     {
-        if ($column->dbType === 'date' && $view == 'search') {
-            return "\$this->widget('datepicker.DatePickerControl', [
-                'model' => \$model,
-                'attribute' => '{$column->name}',
-                'options' => [
-                    'placement' => 'right',
-                    'autoclose' => true,
-                    'todayBtn' => true,
-                ]
-            ])";
-        } elseif ($column->dbType === 'date' && $view == 'form') {
-            return "\$this->widget('datepicker.DatePickerControl', [
-            'model' => \$model,
-            'attribute' => '{$column->name}',
-            'options' => [
-                'placement' => 'right',
-                'autoclose' => true,
-                'todayBtn' => true,
-            ]
-        ])";
-        }
+        $html = 
+"_TAB_<?php \$this->widget('datepicker.DatePickerControl', [
+_TAB_    'model' => \$model,
+_TAB_    'attribute' => '{$column->name}',
+_TAB_    'options' => [
+_TAB_        'placement' => 'right',
+_TAB_        'autoclose' => true,
+_TAB_        'todayBtn' => true,
+_TAB_    ]
+_TAB_]); ?>";
+
+        return $this->indent($html, $tabs);
     }  
 
-    public function generateUpload($modelClass, $column)
+    public function generateUpload($modelClass, $column, $tabs = 0)
     {
         $field = str_replace('up_', '', $column->name);
         $hasImage = false;
@@ -186,53 +176,54 @@ class GInitializrCrudCode extends CrudCode
             $uploadTypeLengend = substr($uploadTypeLengend, 0, strlen($uploadTypeLengend) - 2);
         }
 
-        $html = '<div class="form-group">
-            <?php if (!$model->isNewRecord && $model->up_' . $field . '): ?>';
+        $html = 
+'_TAB_<div class="form-group">
+_TAB_    <?php if (!$model->isNewRecord && $model->up_' . $field . '): ?>';
         // Si es de tipo imagen generamos un thumbnail
         if ($hasImage) {
-            $html .= "\n\t\t\t\t" . '<?= CHtml::link(CHTML::image(Yii::app()->request->baseUrl . $model->up_machine_imagen, "", []), Yii::app()->request->baseUrl . $model->up_machine_imagen, [
-                    \'target\' => \'_blank\',
-                    \'class\' => \'thumbnail\',
-                ]); ?>
-            <?php endif; ?>';
+            $html .= 
+"_TAB_\n\t\t\t\t\t" . '<?= CHtml::link(CHTML::image(Yii::app()->request->baseUrl . $model->up_machine_imagen, "", []), Yii::app()->request->baseUrl . $model->up_machine_imagen, [
+_TAB_            \'target\' => \'_blank\',
+_TAB_            \'class\' => \'thumbnail\',
+_TAB_        ]); ?>
+_TAB_    <?php endif; ?>';
         } else {
-            $html .= "\n\t\t\t\t" . '<div style=\"padding:1em\">
-                    <?= CHtml::link($model->up_' . $field . ', Yii::app()->request->baseUrl . $model->up_machine_' . $field . ', [
-                        \'target\' => \'_blank\',
-                        \'class\' => \'thumbnail\',
-                    ]); ?>
-                </div>
-            <?php endif; ?>';
+            $html .= 
+"_TAB_\n\t\t\t\t" . '<div style=\"padding:1em\">
+_TAB_                    <?= CHtml::link($model->up_' . $field . ', Yii::app()->request->baseUrl . $model->up_machine_' . $field . ', [
+_TAB_                        \'target\' => \'_blank\',
+_TAB_                        \'class\' => \'thumbnail\',
+_TAB_                    ]); ?>
+_TAB_                </div>
+_TAB_            <?php endif; ?>';
         }
 
-        return $html . '
+            $html .= 
+"_TAB_\n\t\t\t\t" . '<?php $this->widget(\'matrixAssets.ui.yii-ikirux-dropzone.DropZone\', [
+_TAB_           \'url\' => Yii::app()->createUrl(\'' . $this->class2id($modelClass) . '/upload\', [
+_TAB_           \'fileNameAttribute\' => \'up_' . $field . '\',
+_TAB_           \'fileInternalAttribute\' => \'up_machine_' . $field . '\',
+_TAB_        ]),
+_TAB_        \'model\' => $model,
+_TAB_        \'attribute\' => \'up_' . $field . '\',
+_TAB_        \'idDiv\' => \'' . $field . 'Div\',
+_TAB_        \'options\' => [
+_TAB_            \'dictDefaultMessage\' => \'Arrastre un archivo aquí (' . $uploadTypeLengend . ')\',
+_TAB_        ],
+_TAB_    ]); ?>  
+_TAB_</div>';
 
-            <?php $this->widget(\'matrixAssets.ui.yii-ikirux-dropzone.DropZone\', [
-                \'url\' => Yii::app()->createUrl(\'' . $this->class2id($modelClass) . '/upload\', [
-                    \'fileNameAttribute\' => \'up_' . $field . '\',
-                    \'fileInternalAttribute\' => \'up_machine_' . $field . '\',
-                ]),
-                \'model\' => $model,
-                \'attribute\' => \'up_' . $field . '\',
-                \'idDiv\' => \'' . $field . 'Div\',
-                \'options\' => [
-                    \'dictDefaultMessage\' => \'Arrastre un archivo aquí (' . $uploadTypeLengend . ')\',
-                ],
-            ]); ?>  
-        </div>';
+        return $this->indent($html, $tabs);
     }
 
-    public function generateEmptyList($modelClass, $column, $view = '')
+    public function generateEmptyList($column, $tabs = 0)
     {
-        if ($view == 'search') {
-            return "\$form->dropDownListControlGroup(\$model, '{$column->name}', [], [
-                'prompt' => \$this->getPrompt(),
-            ])";
-        } elseif ($view == 'form') {
-            return "\$form->dropDownListControlGroup(\$model, '{$column->name}', [], [
-            'prompt' => \$this->getPrompt(),
-        ])";
-        }        
+        $html =
+"_TAB_<?= \$form->dropDownListControlGroup(\$model, '{$column->name}', [], [
+_TAB_    'prompt' => \$this->getPrompt(),
+_TAB_]); ?>";        
+
+        return $this->indent($html, $tabs);    
     }
 
     public function attributeLabels() 
@@ -259,30 +250,6 @@ class GInitializrCrudCode extends CrudCode
         ];
 
         return array_merge(parent::rules(), $customRules);
-    }
-
-    public function pluralize($name) 
-    {
-        if (Yii::app()->language == 'es') {
-            // si termina en a, e, o, á, é, ó va s
-            $strongVowels = ['a', 'e', 'o', 'á', 'é', 'ó'];
-            // si termina en i, u va es
-            $weakVowels = ['i', 'u', 'í', 'ú'];
-            // si termina en consonante va es 
-            $lastLetter = substr($name, -1);
-
-            if (in_array($lastLetter, $strongVowels)) {
-                $name .= 's';
-            } elseif (in_array($lastLetter, $weakVowels)) {
-                $name .= 'es';
-            } else { // Hay otras excepciones
-                $name .= 'es';
-            }
-
-            return $name;
-        } else {
-            return parent::pluralize($name);
-        }
     }
 
     /**
@@ -355,5 +322,11 @@ class GInitializrCrudCode extends CrudCode
         $moduleName =  $idModule != Yii::app()->id ? $idModule : '';
 
         return empty($moduleName) ? $controllerName : "$moduleName.$controllerName";
+    }
+
+    private function indent($subject, $count, $stringTab = "_TAB_")
+    {
+        $replace = str_repeat("\t", $count);
+        return str_replace($stringTab, $replace, $subject);
     }
 }
