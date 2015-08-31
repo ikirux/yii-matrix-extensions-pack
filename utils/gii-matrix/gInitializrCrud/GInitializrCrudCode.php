@@ -168,34 +168,44 @@ class GInitializrCrudCode extends CrudCode
     public function generateUpload($modelClass, $column)
     {
         $field = str_replace('up_', '', $column->name);
+        $hasImage = false;
         $uploadTypeLengend = 'cualquiera';
         if (!empty($column->comment)) {
             $types = explode(',', strtolower($column->comment));
             $uploadTypeLengend = '';
             foreach ($types as $type) {
-                Yii::log($type);
                 if ($type === 'pdf') {
                     $uploadTypeLengend .= 'pdf, ';
                 } elseif ($type === 'doc') {
                     $uploadTypeLengend .= 'doc, docx, ';
                 } elseif ($type === 'image') {
+                    $hasImage = true;
                     $uploadTypeLengend .= 'jpg, jpeg, png, ';
                 }
             }
             $uploadTypeLengend = substr($uploadTypeLengend, 0, strlen($uploadTypeLengend) - 2);
         }
 
-        return '<div class="form-group">
-            <?php if (!$model->isNewRecord): ?>
-                <?php if ($model->up_' . $field . '): ?>
-                    <div style="padding:1em">
-                        <?= CHtml::link($model->up_' . $field . ', Yii::app()->request->baseUrl . $model->up_machine_' . $field . ', [
-                            \'target\' => \'_blank\',
-                            \'class\' => \'thumbnail\',
-                        ]); ?>
-                    </div>
-                <?php endif; ?>        
-            <?php endif; ?>
+        $html = '<div class="form-group">
+            <?php if (!$model->isNewRecord && $model->up_' . $field . '): ?>';
+        // Si es de tipo imagen generamos un thumbnail
+        if ($hasImage) {
+            $html .= "\n\t\t\t\t" . '<?= CHtml::link(CHTML::image(Yii::app()->request->baseUrl . $model->up_machine_imagen, "", []), Yii::app()->request->baseUrl . $model->up_machine_imagen, [
+                    \'target\' => \'_blank\',
+                    \'class\' => \'thumbnail\',
+                ]); ?>
+            <?php endif; ?>';
+        } else {
+            $html .= "\n\t\t\t\t" . '<div style=\"padding:1em\">
+                    <?= CHtml::link($model->up_' . $field . ', Yii::app()->request->baseUrl . $model->up_machine_' . $field . ', [
+                        \'target\' => \'_blank\',
+                        \'class\' => \'thumbnail\',
+                    ]); ?>
+                </div>
+            <?php endif; ?>';
+        }
+
+        return $html . '
 
             <?php $this->widget(\'matrixAssets.ui.yii-ikirux-dropzone.DropZone\', [
                 \'url\' => Yii::app()->createUrl(\'' . $this->class2id($modelClass) . '/upload\', [
