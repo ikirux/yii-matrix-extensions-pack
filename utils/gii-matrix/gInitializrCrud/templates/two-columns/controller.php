@@ -381,7 +381,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 
 		// Generamos la lista de elementos
 <?php if ($this->messageSupport): ?>
-		$html = "<h1><?= "<?= Yii::t('default', 'Listado $this->plural'); ?>" ?></h1>
+		$html = "<h1>" . <?= "Yii::t('default', 'Listado $this->plural')" ?> . "</h1>
 <?php else: ?>
 		$html = "<h1>Listado <?= $this->plural ?></h1>
 <?php endif; ?>
