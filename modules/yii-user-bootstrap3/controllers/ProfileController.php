@@ -9,6 +9,16 @@ class ProfileController extends Controller
 	 * @var CActiveRecord the currently loaded data model instance.
 	 */
 	private $_model;
+
+	public function behaviors()
+	{
+		return [
+            'control-access' => [
+                'class' => 'matrixAssets.behaviors.ControlAccessBehavior',
+            ],		
+		];
+	}
+		
 	/**
 	 * Shows a particular model.
 	 */

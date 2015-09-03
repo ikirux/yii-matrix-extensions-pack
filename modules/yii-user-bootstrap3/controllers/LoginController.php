@@ -4,6 +4,15 @@ class LoginController extends Controller
 {
 	public $defaultAction = 'login';
 
+	public function behaviors()
+	{
+		return [
+            'control-access' => [
+                'class' => 'matrixAssets.behaviors.ControlAccessBehavior',
+            ],		
+		];
+	}
+	
 	/**
 	 * Displays the login page
 	 */

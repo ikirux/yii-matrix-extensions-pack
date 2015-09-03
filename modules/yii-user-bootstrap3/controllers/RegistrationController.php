@@ -19,6 +19,15 @@ class RegistrationController extends Controller
 		];
 	}
 
+    public function behaviors()
+    {
+        return [
+            'control-access' => [
+                'class' => 'matrixAssets.behaviors.ControlAccessBehavior',
+            ],      
+        ];
+    }
+    
 	/**
 	 * Registration user
 	 */

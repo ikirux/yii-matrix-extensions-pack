@@ -5,6 +5,15 @@ class RecoveryController extends Controller
 	public $defaultAction = 'recovery';
 	public $layout = '//layouts/column2';
 	
+	public function behaviors()
+	{
+		return [
+            'control-access' => [
+                'class' => 'matrixAssets.behaviors.ControlAccessBehavior',
+            ],		
+		];
+	}
+		
 	/**
 	 * Recovery password
 	 */
