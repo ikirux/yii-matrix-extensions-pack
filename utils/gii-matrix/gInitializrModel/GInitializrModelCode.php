@@ -256,10 +256,20 @@ class GInitializrModelCode extends ModelCode
     }
 
     public function rules() {
+    	$parentRules = parent::rules();
         $customRules = [
             ['generateAudit, messageSupport', 'safe'],
         ];
 
-        return array_merge(parent::rules(), $customRules);
+        // Debemos reemplazar la rules que valida el nombre del modelo, ya que las tablas de la base de codigo
+        // tienen el patron {{nombre-tabla}}
+        foreach ($parentRules as $key => &$rule) {
+        	if ($rule[0] === 'tablePrefix, tableName, modelPath') {
+        		Yii::log($rule['pattern']);
+        		$rule['pattern'] = '/^([\w\{]+[\w\.]*\}*|\*?|\w+\.\*)/';
+        	}
+        }
+
+        return array_merge($parentRules, $customRules);
     }	
 }
