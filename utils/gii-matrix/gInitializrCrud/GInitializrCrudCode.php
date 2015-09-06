@@ -212,7 +212,7 @@ _TAB_]); ?>";
 "\n_TAB_\t\t\t'dictDefaultMessage' => Yii::t('default', 'Arrastre un archivo aquí (" . $uploadTypeLengend . ")')," .
 "\n_TAB_\t\t]," .
 "\n_TAB_\t]); ?>" . 
-"\n_TAB_</div>'";
+"\n_TAB_</div>";
         } else {
             $html .= 
 "\n_TAB_\t<?php \$this->widget('matrixAssets.ui.yii-ikirux-dropzone.DropZone', [" .
@@ -227,7 +227,7 @@ _TAB_]); ?>";
 "\n_TAB_\t\t\t'dictDefaultMessage' => 'Arrastre un archivo aquí (" . $uploadTypeLengend . ")'," .
 "\n_TAB_\t\t]," .
 "\n_TAB_\t]); ?>" . 
-"\n_TAB_</div>'";
+"\n_TAB_</div>";
         }
 
         return $this->indent($html, $tabs);
