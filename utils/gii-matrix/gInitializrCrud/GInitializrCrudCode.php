@@ -177,57 +177,57 @@ _TAB_]); ?>";
         }
 
         $html = 
-'_TAB_<div class="form-group">
-_TAB_    <?php if (!$model->isNewRecord && $model->up_' . $field . '): ?>';
+"_TAB_<div class=\"form-group\">" .
+"\n_TAB_\t<?php if (!\$model->isNewRecord && \$model->up_" . $field . "): ?>";
         // Si es de tipo imagen generamos un thumbnail
         if ($hasImage) {
             $html .= 
-"_TAB_\n\t\t\t\t\t" . '<?= CHtml::link(CHTML::image(Yii::app()->request->baseUrl . $model->up_machine_' . $field . ', "", []), Yii::app()->request->baseUrl . $model->up_machine_' . $field . ', [
-_TAB_            \'target\' => \'_blank\',
-_TAB_            \'class\' => \'thumbnail\',
-_TAB_        ]); ?>
-_TAB_    <?php endif; ?>';
+"\n_TAB_\t\t<?= CHtml::link(CHTML::image(Yii::app()->request->baseUrl . \$model->up_machine_" . $field . ", '', []), Yii::app()->request->baseUrl . \$model->up_machine_" . $field . ", [" .
+"\n_TAB_\t\t\t'target' => '_blank'," .
+"\n_TAB_\t\t\t'class' => 'thumbnail'," .
+"\n_TAB_\t\t]); ?>" .
+"\n_TAB_\t<?php endif; ?>";
         } else {
             $html .= 
-"_TAB_\n\t\t\t\t" . '<div style=\"padding:1em\">
-_TAB_                    <?= CHtml::link($model->up_' . $field . ', Yii::app()->request->baseUrl . $model->up_machine_' . $field . ', [
-_TAB_                        \'target\' => \'_blank\',
-_TAB_                        \'class\' => \'thumbnail\',
-_TAB_                    ]); ?>
-_TAB_                </div>
-_TAB_            <?php endif; ?>';
+"\n_TAB_\t\t<div style=\"padding:1em\">" .
+"\n_TAB_\t\t\t<?= CHtml::link(\$model->up_" . $field . ", Yii::app()->request->baseUrl . \$model->up_machine_" . $field . ", [" .
+"\n_TAB_\t\t\t\t'target' => '_blank'," .
+"\n_TAB_\t\t\t\t'class' => 'thumbnail'," .
+"\n_TAB_\t\t\t]); ?>" .
+"\n_TAB_\t\t</div>" .
+"\n_TAB_\t<?php endif; ?>";
         }
 
         if ($this->messageSupport) {
             $html .= 
-"_TAB_\n\t\t\t\t" . '<?php $this->widget(\'matrixAssets.ui.yii-ikirux-dropzone.DropZone\', [
-_TAB_           \'url\' => Yii::app()->createUrl(\'' . $this->controller . '/upload\', [
-_TAB_           \'fileNameAttribute\' => \'up_' . $field . '\',
-_TAB_           \'fileInternalAttribute\' => \'up_machine_' . $field . '\',
-_TAB_        ]),
-_TAB_        \'model\' => $model,
-_TAB_        \'attribute\' => \'up_' . $field . '\',
-_TAB_        \'idDiv\' => \'' . $field . 'Div\',
-_TAB_        \'options\' => [
-_TAB_            \'dictDefaultMessage\' => Yii::t(\'default\', \'Arrastre un archivo aquí (' . $uploadTypeLengend . ')\'),
-_TAB_        ],
-_TAB_    ]); ?>  
-_TAB_</div>';
+"\n_TAB_\t<?php \$this->widget('matrixAssets.ui.yii-ikirux-dropzone.DropZone', [" .
+"\n_TAB_\t\t'url' => Yii::app()->createUrl('" . $this->controller . "/upload', [" .
+"\n_TAB_\t\t\t'fileNameAttribute' => 'up_" . $field . "'," .
+"\n_TAB_\t\t\t'fileInternalAttribute' => 'up_machine_" . $field . "'," .
+"\n_TAB_\t\t])," .
+"\n_TAB_\t\t'model' => \$model," .
+"\n_TAB_\t\t'attribute' => 'up_" . $field . "'," .
+"\n_TAB_\t\t'idDiv' => '" . $field . "Div'," .
+"\n_TAB_\t\t'options' => [" .
+"\n_TAB_\t\t\t'dictDefaultMessage' => Yii::t('default', 'Arrastre un archivo aquí (" . $uploadTypeLengend . ")')," .
+"\n_TAB_\t\t]," .
+"\n_TAB_\t]); ?>" . 
+"\n_TAB_</div>'";
         } else {
             $html .= 
-"_TAB_\n\t\t\t\t" . '<?php $this->widget(\'matrixAssets.ui.yii-ikirux-dropzone.DropZone\', [
-_TAB_           \'url\' => Yii::app()->createUrl(\'' . $this->controller . '/upload\', [
-_TAB_           \'fileNameAttribute\' => \'up_' . $field . '\',
-_TAB_           \'fileInternalAttribute\' => \'up_machine_' . $field . '\',
-_TAB_        ]),
-_TAB_        \'model\' => $model,
-_TAB_        \'attribute\' => \'up_' . $field . '\',
-_TAB_        \'idDiv\' => \'' . $field . 'Div\',
-_TAB_        \'options\' => [
-_TAB_            \'dictDefaultMessage\' => \'Arrastre un archivo aquí (' . $uploadTypeLengend . ')\',
-_TAB_        ],
-_TAB_    ]); ?>  
-_TAB_</div>';
+"\n_TAB_\t<?php \$this->widget('matrixAssets.ui.yii-ikirux-dropzone.DropZone', [" .
+"\n_TAB_\t\t'url' => Yii::app()->createUrl('" . $this->controller . "/upload', [" .
+"\n_TAB_\t\t\t'fileNameAttribute' => 'up_" . $field . "'," .
+"\n_TAB_\t\t\t'fileInternalAttribute' => 'up_machine_" . $field . "'," .
+"\n_TAB_\t\t])," .
+"\n_TAB_\t\t'model' => \$model," .
+"\n_TAB_\t\t'attribute' => 'up_" . $field . "'," .
+"\n_TAB_\t\t'idDiv' => '" . $field . "Div'," .
+"\n_TAB_\t\t'options' => [" .
+"\n_TAB_\t\t\t'dictDefaultMessage' => 'Arrastre un archivo aquí (" . $uploadTypeLengend . ")'," .
+"\n_TAB_\t\t]," .
+"\n_TAB_\t]); ?>" . 
+"\n_TAB_</div>'";
         }
 
         return $this->indent($html, $tabs);
