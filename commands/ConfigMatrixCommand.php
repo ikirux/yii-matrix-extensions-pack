@@ -62,17 +62,28 @@ class ConfigMatrixCommand extends CConsoleCommand
 
 		$search = ['__DBNAME__', '__DBUSER__', '__DBPASS__'];
 		$replace = [$this->dbName, $this->dbUser, $this->dbPass];
-
 		echo "Generando archivos de configuración... ";
 		// Se reemplazan configuraciones archivo principal
-		$text = file_get_contents($mainConfigFile);
+		$text = file_get_contents($mainConfigFile . '.orig');
 		$text = str_replace($search, $replace, $text);
 		file_put_contents($mainConfigFile, $text);
 
 		// Se reemplazan configuraciones archivo consola
-		$text = file_get_contents($consoleConfigFile);
+		$text = file_get_contents($consoleConfigFile . '.orig');
 		$text = str_replace($search, $replace, $text);
-		file_put_contents($consoleConfigFile, $text);		
+		file_put_contents($consoleConfigFile, $text);
+		echo "Ok\n";
+
+		echo "Limpiando la base de datos... ";
+		$mysqli = new mysqli("localhost", $this->dbUser, $this->dbPass, $this->dbName);
+		$mysqli->query('SET foreign_key_checks = 0');
+		if ($result = $mysqli->query("SHOW TABLES")) {
+		    while ($row = $result->fetch_array(MYSQLI_NUM)) {
+		        $mysqli->query('DROP TABLE IF EXISTS ' . $row[0]);
+		    }
+		}
+		$mysqli->query('SET foreign_key_checks = 1');
+		$mysqli->close();
 		echo "Ok\n";
 
 		echo "Cargando estructura base de la base de datos... ";
