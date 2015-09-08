@@ -176,7 +176,10 @@ class <?php echo $modelClass; ?> extends <?php echo $this->baseClass."\n"; ?>
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria = new CDbCriteria;
-		
+<?php	if ($existDateFields) {
+			echo "\$this->convertMachineFormatDate(\$this);";
+		}
+?>
 <?php
 foreach($columns as $name=>$column)
 {

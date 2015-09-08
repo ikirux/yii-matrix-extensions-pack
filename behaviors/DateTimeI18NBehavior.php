@@ -77,13 +77,9 @@ class DateTimeI18NBehavior  extends CActiveRecordBehavior
 		return $this->convertMachineFormatDate($event->sender);
 	}
 
-	public function beforeFind($event)
-	{
-		return $this->convertMachineFormatDate($event->sender);
-	}
-
 	public function afterFind($event)
 	{
-		return $this->convertHumanFormatDate($event->sender);
+		parent::afterFind($event);
+		$this->convertHumanFormatDate($event->sender);
 	}
 }
