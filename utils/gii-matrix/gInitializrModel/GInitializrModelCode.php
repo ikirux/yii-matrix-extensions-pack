@@ -56,6 +56,7 @@ class GInitializrModelCode extends ModelCode
 		$ruts = [];
 		$uploads = [];
 		$uploads_type = [];
+		$email = [];
 
 		foreach ($table->columns as $column) {
 			if ($column->autoIncrement) {
@@ -103,6 +104,8 @@ class GInitializrModelCode extends ModelCode
 					$length[$column->size][] = $column->name;
 					if ($column->name == 'rut') {
 						$ruts[] = $column->name;
+					} elseif (strpos($column->name, "mail") !== false) {
+						$email[] = $column->name;
 					}
 				} elseif ($column->dbType === 'date') {
 					$dates[] = $column->name;
@@ -147,6 +150,10 @@ class GInitializrModelCode extends ModelCode
 			foreach ($uploads as $key => $upload) {
 				$rules[] = "['" . $upload . "', 'matrixAssets.validators.uploadFile', 'allowType' => " . $uploads_type[$key] . ", 'on' => 'uploadingFile']";
 			}			
+		}
+
+		if ($email !== []) {
+			$rules[] = "['" . implode(', ', $email) . "', 'email']";
 		}
 
 		return $rules;
