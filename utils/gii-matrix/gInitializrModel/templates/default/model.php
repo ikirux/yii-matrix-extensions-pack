@@ -177,7 +177,7 @@ class <?php echo $modelClass; ?> extends <?php echo $this->baseClass."\n"; ?>
 
 		$criteria = new CDbCriteria;
 <?php	if ($existDateFields) {
-			echo "\$this->convertMachineFormatDate(\$this);";
+			echo "\t\t\$this->convertMachineFormatDate(\$this);\n\n";
 		}
 ?>
 <?php
