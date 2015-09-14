@@ -164,9 +164,9 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 	        } catch(Exception $e) {
 	            $transaction->rollback();
 <?php if ($this->messageSupport): ?>
-					Yii::app()->user->setFlash('error', Yii::t('default', 'Se ha producido un error al realizar la operación'));
+				Yii::app()->user->setFlash('error', Yii::t('default', 'Se ha producido un error al realizar la operación'));
 <?php else: ?>
-					Yii::app()->user->setFlash('error', 'Se ha producido un error al realizar la operación');
+				Yii::app()->user->setFlash('error', 'Se ha producido un error al realizar la operación');
 <?php endif; ?>
 	            Yii::app()->handleException($e);
 	        }
@@ -239,9 +239,9 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 	        } catch(Exception $e) {
 	            $transaction->rollback();
 <?php if ($this->messageSupport): ?>
-					Yii::app()->user->setFlash('error', Yii::t('default', 'Se ha producido un error al realizar la operación'));
+				Yii::app()->user->setFlash('error', Yii::t('default', 'Se ha producido un error al realizar la operación'));
 <?php else: ?>
-					Yii::app()->user->setFlash('error', 'Se ha producido un error al realizar la operación');
+				Yii::app()->user->setFlash('error', 'Se ha producido un error al realizar la operación');
 <?php endif; ?>
 	            Yii::app()->handleException($e);
 	        }

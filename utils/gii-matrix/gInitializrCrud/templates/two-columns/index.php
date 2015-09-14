@@ -105,7 +105,8 @@ $('.search-form form').submit(function(){
                     $column->name == $this->createUser ||
                     $column->name == $this->updateAttribute ||
                     $column->name == $this->updateUser ||
-                    strpos($column->name, "up_") !== false
+                    strpos($column->name, "up_") !== false ||
+                    stripos($column->dbType, 'text') !== false
                 ) {
                     continue;
                 }
