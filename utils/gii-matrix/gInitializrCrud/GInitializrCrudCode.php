@@ -334,11 +334,7 @@ _TAB_]); ?>";
      **/
     public function prefixPermission()   
     {
-        $controllerName = strtolower(str_replace('Controller', '', $this->getControllerClass()));
-        $idModule = $this->getModule()->id;
-        $moduleName =  $idModule != Yii::app()->id ? $idModule : '';
-
-        return empty($moduleName) ? $controllerName : "$moduleName.$controllerName";
+        return str_replace('/', '.', $this->controller);
     }
 
     private function indent($subject, $count, $stringTab = "_TAB_")
