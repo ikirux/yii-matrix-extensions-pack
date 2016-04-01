@@ -155,6 +155,10 @@ class XTabularInput extends CWidget
 	 */
 	public $addLabel = 'Add';
 	/**
+	 * @var string the enable or disable adds inputs rendering. Defaults to true.
+	 */
+	public $displayLink = true;
+	/**
 	 * @var string the HTML tag name for the widget container. Defaults to 'div'.
 	 */
 	public $containerTagName = 'div';
@@ -288,7 +292,9 @@ class XTabularInput extends CWidget
 		echo CHtml::openTag($this->inputContainerTagName, $this->inputContainerHtmlOptions);
 		$this->renderContent();
 		echo CHtml::closeTag($this->inputContainerTagName);
-		echo $this->getAddLink();
+		if ($this->displayLink) {
+			echo $this->getAddLink();	
+		}		
 		echo CHtml::closeTag($this->containerTagName);
 	}
 
