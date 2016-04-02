@@ -322,7 +322,6 @@ class XTabularInput extends CWidget
 		event.preventDefault();
 		var input = $("#{$this->id}").children(".{$this->inputContainerCssClass}");
 		var index = input.find(".{$this->indexCssClass}").length>0 ? input.find(".{$this->indexCssClass}").max()+1 : 0;
-								alert("#{$this->id}");
 		$.ajax({
 			success: function(html){
 				input.append('{$openInputTag}'+html+'{$this->getRemoveLinkAndIndexInput("'+index+'")}{$closeInputTag}');
