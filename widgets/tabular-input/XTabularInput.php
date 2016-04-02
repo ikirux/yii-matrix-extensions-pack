@@ -318,23 +318,28 @@ class XTabularInput extends CWidget
 		// register inline javascript
 		$script =
 <<<SCRIPT
-	$("#{$this->id} .{$this->addCssClass}").click(function(event){
+    function addTabularInputRow(event) {
 		event.preventDefault();
-		var input = $(this).parents(".{$this->containerCssClass}:first").children(".{$this->inputContainerCssClass}");
+		var input = $("#{$this->id}").children(".{$this->inputContainerCssClass}");
 		var index = input.find(".{$this->indexCssClass}").length>0 ? input.find(".{$this->indexCssClass}").max()+1 : 0;
+								alert("#{$this->id}");
 		$.ajax({
 			success: function(html){
 				input.append('{$openInputTag}'+html+'{$this->getRemoveLinkAndIndexInput("'+index+'")}{$closeInputTag}');
 				input.siblings('.{$this->headerCssClass}').show();
 			},
 			type: 'get',
-			url: this.href,
+			url: event.currentTarget.href,
 			data: {
 				index: index
 			},
 			cache: false,
 			dataType: 'html'
 		});
+    }
+
+	$("#{$this->id} .{$this->addCssClass}").click(function(event){
+		addTabularInputRow(event);
 	});
 	$("#{$this->id}").on("click", ".{$this->removeCssClass}", function(event) {
 		event.preventDefault();
