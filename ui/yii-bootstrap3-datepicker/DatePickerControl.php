@@ -8,6 +8,16 @@
  */
 class DatePickerControl extends CInputWidget
 {
+    /**
+     * Assets package ID.
+     */
+    const PACKAGE_ID = 'yii-datepicker-bootstrap3';
+
+    /**
+    * @var array
+    */
+    public $package = [];
+
 	/**
 	 * @var array the options for the Bootstrap JavaScript plugin.
 	 */
@@ -109,18 +119,28 @@ class DatePickerControl extends CInputWidget
 	 */
 	public function registerClientScript($id)
 	{
-		$baseScriptUrl = Yii::app()->getAssetManager()->publish(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'assets');
+        // Prepare script package.
+        $this->package = array_merge([
+            'baseUrl' => $this->getAssetsUrl(),
+            'js' => [
+                YII_DEBUG ? 'js/bootstrap-datepicker.js' : 'js/bootstrap-datepicker.min.js',
+                $this->options['language'] != "en" ? 'js/locales/bootstrap-datepicker.' . $this->options['language'] . '.js' : '',
+            ],
+            'css' => [
+                YII_DEBUG ? 'css/datepicker3.css' : 'css/datepicker3.min.css'
+            ],
+            'depends' => [
+                'jquery',
+                'jquery.ui',
+            ],
+        ], $this->package);
 
-		$cs = Yii::app()->getClientScript();
-		$cs->registerCssFile($baseScriptUrl . '/css/datepicker3.css');
-		$cs->registerScriptFile($baseScriptUrl . '/js/bootstrap-datepicker.js', CClientScript::POS_END);
-
-		// We load the language
-		if ($this->options['language'] != "en") {
-			$cs->registerScriptFile($baseScriptUrl . '/js/locales/bootstrap-datepicker.' . $this->options['language'] . '.js', CClientScript::POS_END);
-		}
-
+        $clientScript = Yii::app()->getClientScript();
 		$options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
+
+        $clientScript
+            ->addPackage(self::PACKAGE_ID, $this->package)
+            ->registerPackage(self::PACKAGE_ID);         
 
 		ob_start();
 		echo "jQuery('#{$id}').datepicker({$options})";
@@ -142,7 +162,8 @@ class DatePickerControl extends CInputWidget
 			if (!empty($argument)) {
 				echo ".datepicker($argument)";	
 			}
-		}		
+		}
+
 		foreach ($this->events as $event => $handler) {
 			echo ".on('{$event}', " . CJavaScript::encode($handler) . ")";
 		}
@@ -153,6 +174,24 @@ class DatePickerControl extends CInputWidget
 			echo "jQuery('#{$id}').trigger('{$event}');";	
 		}
 		
-		Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $this->getId(), ob_get_clean());
+		$clientScript->registerScript(__CLASS__ . '#' . $this->getId(), ob_get_clean());                   
 	}
+
+    /**
+    * Get the assets path.
+    * @return string
+    */
+    public function getAssetsPath()
+    {
+        return dirname(__FILE__) . '/assets';
+    }
+
+    /**
+    * Publish assets and return url.
+    * @return string
+    */
+    public function getAssetsUrl()
+    {
+        return Yii::app()->getAssetManager()->publish($this->getAssetsPath());
+    }		
 }
