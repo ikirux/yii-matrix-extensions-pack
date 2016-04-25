@@ -226,6 +226,10 @@ class XTabularInput extends CWidget
 	 * Default CSS class for the element that adds inputs.
 	 */
 	public $addCssClass = 'tabular-input-add';
+	/**
+	 * Allow add more than one element per transaction
+	 */
+	public $multiElements = false;
 
 	/**
 	 * Initializes the widget.
@@ -316,11 +320,43 @@ class XTabularInput extends CWidget
 		$closeInputTag = CHtml::closeTag($this->inputTagName);
 
 		// register inline javascript
-		$script =
+		if ($multiElements) {
+			$script =
 <<<SCRIPT
-	$("#{$this->id} .{$this->addCssClass}").click(function(event){
+    function addTabularInputRow(event) {
 		event.preventDefault();
-		var input = $(this).parents(".{$this->containerCssClass}:first").children(".{$this->inputContainerCssClass}");
+		var input = $("#{$this->id}").children(".{$this->inputContainerCssClass}");
+		var index = input.find(".{$this->indexCssClass}").length>0 ? input.find(".{$this->indexCssClass}").max()+1 : 0;
+		$.ajax({
+			success: function(json) {
+				input.append('{$openInputTag}'+html+'{$this->getRemoveLinkAndIndexInput("'+index+'")}{$closeInputTag}');
+				input.siblings('.{$this->headerCssClass}').show();
+			},
+			type: 'get',
+			url: event.currentTarget.href,
+			data: {
+				index: index
+			},
+			cache: false,
+			dataType: 'json'
+		});
+    }
+
+	$("#{$this->id} .{$this->addCssClass}").click(function(event){
+		addTabularInputRow(event);
+	});
+	$("#{$this->id}").on("click", ".{$this->removeCssClass}", function(event) {
+		event.preventDefault();
+		$(this).parents(".{$this->inputCssClass}:first").remove();
+		$('.{$this->inputContainerCssClass}').filter(function(){return $.trim($(this).text())==='' && $(this).children().length == 0}).siblings('.{$this->headerCssClass}').hide();
+	});
+SCRIPT;				
+		} else {
+			$script =
+<<<SCRIPT
+    function addTabularInputRow(event) {
+		event.preventDefault();
+		var input = $("#{$this->id}").children(".{$this->inputContainerCssClass}");
 		var index = input.find(".{$this->indexCssClass}").length>0 ? input.find(".{$this->indexCssClass}").max()+1 : 0;
 		$.ajax({
 			success: function(html){
@@ -328,20 +364,25 @@ class XTabularInput extends CWidget
 				input.siblings('.{$this->headerCssClass}').show();
 			},
 			type: 'get',
-			url: this.href,
+			url: event.currentTarget.href,
 			data: {
 				index: index
 			},
 			cache: false,
 			dataType: 'html'
 		});
+    }
+
+	$("#{$this->id} .{$this->addCssClass}").click(function(event){
+		addTabularInputRow(event);
 	});
 	$("#{$this->id}").on("click", ".{$this->removeCssClass}", function(event) {
 		event.preventDefault();
 		$(this).parents(".{$this->inputCssClass}:first").remove();
 		$('.{$this->inputContainerCssClass}').filter(function(){return $.trim($(this).text())==='' && $(this).children().length == 0}).siblings('.{$this->headerCssClass}').hide();
 	});
-SCRIPT;
+SCRIPT;			
+		}
 
 		$cs->registerScript(__CLASS__ . '#' . $this->id, $script, CClientScript::POS_READY);
 	}
