@@ -226,7 +226,15 @@ class XTabularInput extends CWidget
 	 * Default CSS class for the element that adds inputs.
 	 */
 	public $addCssClass = 'tabular-input-add';
-
+	/**
+	 * Allow add more than one element per transaction
+	 */
+	public $multiElements = false;
+	/**
+	 * Default function add row name
+	 */
+	public $functionName = 'addTabularInputRow';
+		
 	/**
 	 * Initializes the widget.
 	 */
@@ -316,9 +324,43 @@ class XTabularInput extends CWidget
 		$closeInputTag = CHtml::closeTag($this->inputTagName);
 
 		// register inline javascript
-		$script =
+		if ($this->multiElements) {
+			$script =
 <<<SCRIPT
-    function addTabularInputRow(event) {
+    function {$this->functionName}(event) {
+		event.preventDefault();
+		var input = $("#{$this->id}").children(".{$this->inputContainerCssClass}");
+		var index = input.find(".{$this->indexCssClass}").length>0 ? input.find(".{$this->indexCssClass}").max()+1 : 0;
+		$.ajax({
+			success: function(json) {
+				$.each(json, function (key, value) {
+					input.append('{$openInputTag}' + value.code + '{$this->getRemoveLinkAndIndexInput("' + value.index + '")}{$closeInputTag}');
+					input.siblings('.{$this->headerCssClass}').show();					
+				});
+			},
+			type: 'get',
+			url: event.currentTarget.href,
+			data: {
+				index: index
+			},
+			cache: false,
+			dataType: 'json'
+		});
+    }
+
+	$("#{$this->id} .{$this->addCssClass}").click(function(event){
+		addTabularInputRow(event);
+	});
+	$("#{$this->id}").on("click", ".{$this->removeCssClass}", function(event) {
+		event.preventDefault();
+		$(this).parents(".{$this->inputCssClass}:first").remove();
+		$('.{$this->inputContainerCssClass}').filter(function(){return $.trim($(this).text())==='' && $(this).children().length == 0}).siblings('.{$this->headerCssClass}').hide();
+	});
+SCRIPT;
+		} else {
+			$script =
+<<<SCRIPT
+    function {$this->functionName}(event) {
 		event.preventDefault();
 		var input = $("#{$this->id}").children(".{$this->inputContainerCssClass}");
 		var index = input.find(".{$this->indexCssClass}").length>0 ? input.find(".{$this->indexCssClass}").max()+1 : 0;
@@ -346,6 +388,7 @@ class XTabularInput extends CWidget
 		$('.{$this->inputContainerCssClass}').filter(function(){return $.trim($(this).text())==='' && $(this).children().length == 0}).siblings('.{$this->headerCssClass}').hide();
 	});
 SCRIPT;
+		}
 
 		$cs->registerScript(__CLASS__ . '#' . $this->id, $script, CClientScript::POS_READY);
 	}
