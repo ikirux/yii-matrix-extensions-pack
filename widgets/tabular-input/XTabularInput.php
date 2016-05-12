@@ -226,12 +226,15 @@ class XTabularInput extends CWidget
 	 * Default CSS class for the element that adds inputs.
 	 */
 	public $addCssClass = 'tabular-input-add';
-
 	/**
 	 * Allow add more than one element per transaction
 	 */
 	public $multiElements = false;
-	
+	/**
+	 * Default function add row name
+	 */
+	public $functionName = 'addTabularInputRow';
+		
 	/**
 	 * Initializes the widget.
 	 */
@@ -324,7 +327,7 @@ class XTabularInput extends CWidget
 		if ($this->multiElements) {
 			$script =
 <<<SCRIPT
-    function addTabularInputRow(event) {
+    function {$this->functionName}(event, callback = false) {
 		event.preventDefault();
 		var input = $("#{$this->id}").children(".{$this->inputContainerCssClass}");
 		var index = input.find(".{$this->indexCssClass}").length>0 ? input.find(".{$this->indexCssClass}").max()+1 : 0;
@@ -334,6 +337,10 @@ class XTabularInput extends CWidget
 					input.append('{$openInputTag}' + value.code + '{$this->getRemoveLinkAndIndexInput("' + value.index + '")}{$closeInputTag}');
 					input.siblings('.{$this->headerCssClass}').show();					
 				});
+				
+				if (typeof callback == 'function') {
+					callback();
+				}
 			},
 			type: 'get',
 			url: event.currentTarget.href,
@@ -346,7 +353,7 @@ class XTabularInput extends CWidget
     }
 
 	$("#{$this->id} .{$this->addCssClass}").click(function(event){
-		addTabularInputRow(event);
+		{$this->functionName}(event);
 	});
 	$("#{$this->id}").on("click", ".{$this->removeCssClass}", function(event) {
 		event.preventDefault();
@@ -357,7 +364,7 @@ SCRIPT;
 		} else {
 			$script =
 <<<SCRIPT
-    function addTabularInputRow(event) {
+    function {$this->functionName}(event, callback = false) {
 		event.preventDefault();
 		var input = $("#{$this->id}").children(".{$this->inputContainerCssClass}");
 		var index = input.find(".{$this->indexCssClass}").length>0 ? input.find(".{$this->indexCssClass}").max()+1 : 0;
@@ -365,6 +372,10 @@ SCRIPT;
 			success: function(html){
 				input.append('{$openInputTag}'+html+'{$this->getRemoveLinkAndIndexInput("'+index+'")}{$closeInputTag}');
 				input.siblings('.{$this->headerCssClass}').show();
+				
+				if (typeof callback == 'function') {
+					callback();
+				}				
 			},
 			type: 'get',
 			url: event.currentTarget.href,
@@ -377,7 +388,7 @@ SCRIPT;
     }
 
 	$("#{$this->id} .{$this->addCssClass}").click(function(event){
-		addTabularInputRow(event);
+		{$this->functionName}(event);
 	});
 	$("#{$this->id}").on("click", ".{$this->removeCssClass}", function(event) {
 		event.preventDefault();
