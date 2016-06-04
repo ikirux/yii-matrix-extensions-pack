@@ -40,6 +40,8 @@ class Dropzone extends CWidget {
 
     public $idDiv = "fileup";
     public $machineName = "";
+    
+    public $containerClass = "form-group";
 
     /**
      * Init widget
@@ -78,8 +80,10 @@ class Dropzone extends CWidget {
      */
     public function run() 
     {
+        echo CHtml::openTag('div', ['class' => $this->containerClass]);
         echo CHtml::activeLabel($this->model, $this->attribute);
         echo CHtml::openTag('div', ['class' => 'dropzone', 'id' => $this->idDiv]);
+        echo CHtml::closeTag('div');
         echo CHtml::closeTag('div');
     }
 
