@@ -76,6 +76,15 @@ class DateTimeI18NBehavior  extends CActiveRecordBehavior
 	{
 		return $this->convertMachineFormatDate($event->sender);
 	}
+	
+	/**
+	 * Cuando hay un error generalmente se envia el mismo modelo a la vista
+	 * por lo que ejecutaremos la transformacion a formato de fecha usuario
+	 */
+	public function afterSave($event)
+	{
+		return $this->convertHumanFormatDate($event->sender);
+	}	
 
 	public function afterFind($event)
 	{
