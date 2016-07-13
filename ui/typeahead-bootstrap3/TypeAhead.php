@@ -1,27 +1,61 @@
 <?php
 /**
  * TypeAhead class file.
- * @author Gilles Grandguillaume <gilles.grandguillaume@segic.usach.cl>
+ * @author Carlos Pinto <ikirux@gmail.com>
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @since 0.0.1
+ *
  */
 
 class TypeAhead extends CInputWidget
 {
-	public $minLength = "2";
-	
-	public $related = [];
-	    
     /**
-     * @var integer limit element per search
+     * Assets package ID.
      */
-    public $limit = 5;
-
-    public $events = [];
-
-    public $customEvents = [];
-
+    const PACKAGE_ID = 'yii-typeahead';
+    
+    /**
+    * @var array
+    */
+    public $package = [];
+    
+	/**
+	 * @var array the options for the Bootstrap JavaScript plugin.
+	 */
+	public $options = [];
+    
+	/**
+	 * @var string[] the JavaScript models related.
+	 */
+	public $related = [];
+        
+	/**
+	 * @var string[] the JavaScript event handlers.
+	 */
+	public $events = [];
+    
+	/**
+	 * @var string[] the JavaScript event handlers.
+	 */
+	public $customEvents = [];
+    
+    /**
+    * @var string
+    */
     public $action = 'getJson';
+    
+	/**
+	 * Initializes the widget.
+	 */
+	public function init()
+	{
+		if (!isset($this->options['minLength'])) {
+			$this->options['minLength'] = 2;
+		}
+
+		if (!isset($this->options['limit'])) {
+			$this->options['limit'] = 5;
+		} 
+	}
 
     /**
      * Runs the widget.
@@ -32,11 +66,12 @@ class TypeAhead extends CInputWidget
     	
     	$required = false;
     	
-    	foreach ($this->model->getValidators($this->attribute) as $validator)
+    	foreach ($this->model->getValidators($this->attribute) as $validator) {
     		if ($validator instanceof CRequiredValidator && in_array($this->attribute, $validator->attributes)) {
     			$required = true;
     			break;
     		}
+        }
     	
         $classErrorDiv = ($error = $this->model->getError($this->attribute)) ? 'has-error' : '' ;
         echo CHtml::tag('div', ['class' => 'form-group ' . $classErrorDiv], false, false);
@@ -46,31 +81,42 @@ class TypeAhead extends CInputWidget
         if (!empty($classErrorDiv)) { echo CHtml::tag('p', ['class' => 'help-block'], $error); }
         echo CHtml::closeTag('div');
         echo CHtml::closeTag('div');
-                
-        $cs = Yii::app()->getClientScript();
-        $cs->registerCoreScript('jquery');
-        
-        $bloodhound = YII_DEBUG ? 'bloodhound.js' : 'bloodhound.min.js';
-        $typeaheadBundle =  YII_DEBUG ? 'typeahead.bundle.js' : 'typeahead.bundle.min.js';
-        $typeaheadJquery =  YII_DEBUG ? 'typeahead.jquery.js' : 'typeahead.jquery.min.js';
+        $this->registerClientScript($id);
+    }
 
-        $assetsPath = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'assets';
-        $assetsUrl = Yii::app()->assetManager->publish($assetsPath, false, -1, false);
-        
-        $cs->registerCssFile($assetsUrl . '/css/typeahead.css');
-        
-        $cs->registerScriptFile($assetsUrl . '/js/' . $bloodhound, CClientScript::POS_HEAD);
-        $cs->registerScriptFile($assetsUrl . '/js/' . $typeaheadBundle, CClientScript::POS_HEAD);
-        $cs->registerScriptFile($assetsUrl . '/js/' . $typeaheadJquery, CClientScript::POS_HEAD);
-                
+	/**
+	 * Registers required client script for bootstrap datepicker. It is not used through bootstrap->registerPlugin
+	 * in order to attach events if any
+	 */
+	public function registerClientScript($id)
+	{
+        // Prepare script package.
+        $this->package = array_merge([
+            'baseUrl' => $this->getAssetsUrl(),
+            'js' => [
+                YII_DEBUG ? 'js/bloodhound.js' : 'js/bloodhound.min.js',
+                YII_DEBUG ? 'js/typeahead.bundle.js' : 'js/typeahead.bundle.min.js',
+                YII_DEBUG ? 'js/typeahead.jquery.js' : 'js/typeahead.jquery.min.js',
+            ],
+            'css' => [
+                '/css/typeahead.css',
+            ],
+            'depends' => [
+                'jquery',
+            ],
+        ], $this->package);
+
+        $clientScript = Yii::app()->getClientScript();
+		$options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
+
         $url = explode('/', Yii::app()->request->url);
         array_pop($url);
         $urlForAction = implode('/', $url);
        
         $relatedModel = key($this->related);
         $relatedAttribute = current($this->related);
-        $route = $urlForAction . '/' . $this->action . '?model=' . $relatedModel . '&attribute=' . $relatedAttribute . '&query=%QUERY&limit=' . $this->limit;
-
+        $route = $urlForAction . '/' . $this->action . '?model=' . $relatedModel . '&attribute=' . $relatedAttribute . '&query=%QUERY&limit=' . $this->options['limit'];
+        
         $eventsCustomScript = [];
         foreach($this->customEvents as $event => $expression) {
             $eventsCustomScript[] = ".on('typeahead:{$event}',{$expression})";
@@ -82,25 +128,47 @@ class TypeAhead extends CInputWidget
             $eventsScript[] = ".on('$event',{$expression})";
         }
         $eventsScript = implode("\n", $eventsScript);
-
+        
         $script = "var contentMotor = new Bloodhound({
         	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('" . $relatedAttribute . "'),
         	queryTokenizer: Bloodhound.tokenizers.whitespace,
-        	limit: " . $this->limit . ",
+        	limit: " . $this->options['limit'] . ",
         	remote: {url: '" . $route . "'}
         });		
         		
         contentMotor.initialize();
-        $('#" . $id . "').typeahead({ highlight: true, minLength: " . $this->minLength . " }, {
+        $('#" . $id . "').typeahead({ highlight: true, minLength: " . $this->options['minLength'] . " }, {
         	name: 'json-search',
         	displayKey: '" . $relatedAttribute . "',
-        	limit: " . $this->limit . ",
+        	limit: " . $this->options['limit'] . ",
         	source: contentMotor.ttAdapter()
         })
         $eventsCustomScript
         $eventsScript";
         
-        $cs->registerScript("def-typeAhead" . $this->attribute, $script, CClientScript::POS_END);
+        $clientScript
+            ->addPackage(self::PACKAGE_ID, $this->package)
+            ->registerPackage(self::PACKAGE_ID)
+            ->registerScript(
+                __CLASS__ . '#' . $this->getId(),
+                $script, CClientScript::POS_END);           
+	}
+
+    /**
+    * Get the assets path.
+    * @return string
+    */
+    public function getAssetsPath()
+    {
+        return dirname(__FILE__) . '/assets';
     }
 
+    /**
+    * Publish assets and return url.
+    * @return string
+    */
+    public function getAssetsUrl()
+    {
+        return Yii::app()->getAssetManager()->publish($this->getAssetsPath());
+    }	
 }
