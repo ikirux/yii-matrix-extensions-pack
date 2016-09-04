@@ -17,11 +17,13 @@ class DateTimeI18NBehavior  extends CActiveRecordBehavior
 	public $dateIncomeFormat = 'yyyy-MM-dd';
 	public $dateTimeIncomeFormat = 'yyyy-MM-dd hh:mm:ss';
 
+	public $datePattern = '__date__';
+
 	public function convertMachineFormatDate($origin)
 	{
 		//search for date/datetime columns. Convert it to pure PHP date format
 		foreach ($origin->tableSchema->columns as $columnName => $column) {
-			if (($column->dbType != 'date') and ($column->dbType != 'datetime')) {
+			if (($column->dbType != 'date') and ($column->dbType != 'datetime') and (strpos($this->datePattern, $columnName) == 0)) {
 				continue;
 			}
 									
@@ -47,7 +49,9 @@ class DateTimeI18NBehavior  extends CActiveRecordBehavior
 	public function convertHumanFormatDate($origin)
 	{
 		foreach ($origin->tableSchema->columns as $columnName => $column) {
-			if (($column->dbType != 'date') and ($column->dbType != 'datetime')) continue;
+			if (($column->dbType != 'date') and ($column->dbType != 'datetime') and (strpos($this->datePattern, $columnName) == 0)) {
+				continue;
+			} 
 
             // Store original somewhere
             if (isset($origin->_original_dates)) {
@@ -81,9 +85,9 @@ class DateTimeI18NBehavior  extends CActiveRecordBehavior
 	 * Cuando hay un error generalmente se envia el mismo modelo a la vista
 	 * por lo que ejecutaremos la transformacion a formato de fecha usuario
 	 */
-	public function afterSave($event)
-	{
-		return $this->convertHumanFormatDate($event->sender);
+	public function afterSave($event)
+	{
+		return $this->convertHumanFormatDate($event->sender);
 	}	
 
 	public function afterFind($event)
