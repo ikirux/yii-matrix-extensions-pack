@@ -17,24 +17,22 @@ class DateTimeI18NBehavior  extends CActiveRecordBehavior
 	public $dateIncomeFormat = 'yyyy-MM-dd';
 	public $dateTimeIncomeFormat = 'yyyy-MM-dd hh:mm:ss';
 
-	public $datePattern = '__date__';
+	public $extra_date_field = [];
+	public $_original_dates = [];
 
 	public function convertMachineFormatDate($origin)
 	{
 		//search for date/datetime columns. Convert it to pure PHP date format
 		foreach ($origin->tableSchema->columns as $columnName => $column) {
-			if (($column->dbType != 'date') and ($column->dbType != 'datetime') and (strpos($this->datePattern, $columnName) == 0)) {
-				continue;
-			}
-									
 			if (!strlen($origin->$columnName)) { 
-				$origin->$columnName = null;
 				continue;
 			}
-			
-			if (($column->dbType == 'date')) {				
+
+			if ($column->dbType == 'date') {
+				$this->_original_dates[$columnName] = $origin->$columnName;				
 				$origin->$columnName = date($this->dateOutcomeFormat, CDateTimeParser::parse($origin->$columnName, Yii::app()->locale->dateFormat));
-			} else { // datetime				
+			} elseif ($column->dbType == 'datetime') { // datetime
+				$this->_original_dates[$columnName] = $origin->$columnName;				
 				$origin->$columnName = date($this->dateTimeOutcomeFormat, 
 					CDateTimeParser::parse($origin->$columnName, 
 						strtr(Yii::app()->locale->dateTimeFormat, 
@@ -43,35 +41,42 @@ class DateTimeI18NBehavior  extends CActiveRecordBehavior
 			}			
 		}
 
+		foreach ($this->extra_date_field as $columnName) {
+			if (!strlen($origin->$columnName)) { 
+				continue;
+			}
+						
+			$this->_original_dates[$columnName] = $origin->$columnName;				
+			$origin->$columnName = date($this->dateOutcomeFormat, CDateTimeParser::parse($origin->$columnName, Yii::app()->locale->dateFormat));
+		}	
+
 		return true;
 	}
 
 	public function convertHumanFormatDate($origin)
 	{
 		foreach ($origin->tableSchema->columns as $columnName => $column) {
-			if (($column->dbType != 'date') and ($column->dbType != 'datetime') and (strpos($this->datePattern, $columnName) == 0)) {
-				continue;
-			} 
-
-            // Store original somewhere
-            if (isset($origin->_original_dates)) {
-            	$origin->_original_dates [$columnName] = $event->sender->$columnName;
-            }
-
-			if (!strlen($origin->$columnName)) {
-				$origin->$columnName = null;
+			if (!strlen($origin->$columnName)) { 
 				continue;
 			}
 
-			if ($column->dbType == 'date') {	
+			if ($column->dbType == 'date') {
+				$this->_original_dates[$columnName] = $origin->$columnName;	
 				$origin->$columnName = Yii::app()->dateFormatter->formatDateTime(
 					CDateTimeParser::parse($origin->$columnName, $this->dateIncomeFormat), 'medium', null);
-			} else {	
+			} elseif ($column->dbType == 'datetime') { // datetime
+				$this->_original_dates[$columnName] = $origin->$columnName;
                	$newval = CDateTimeParser::parse($origin->$columnName, $this->dateTimeIncomeFormat);
                	// Check convert works, otherwise if source date is 0000-00-00 00:00:00 would return NOW()
 				$origin->$columnName = $newval !== FALSE ? Yii::app()->dateFormatter->formatDateTime($newval, 'medium', 'medium') : null;
 			}
 		}
+
+		foreach ($this->extra_date_field as $columnName) {
+			$this->_original_dates[$columnName] = $origin->$columnName;	
+			$origin->$columnName = Yii::app()->dateFormatter->formatDateTime(
+					CDateTimeParser::parse($origin->$columnName, $this->dateIncomeFormat), 'medium', null);						
+		}			
 
 		return true;
 	}
