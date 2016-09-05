@@ -24,7 +24,8 @@ class DateTimeI18NBehavior  extends CActiveRecordBehavior
 	{
 		//search for date/datetime columns. Convert it to pure PHP date format
 		foreach ($origin->tableSchema->columns as $columnName => $column) {
-			if (!strlen($origin->$columnName)) { 
+			if (!strlen($origin->$columnName)) {
+				$origin->$columnName = null;			 
 				continue;
 			}
 
@@ -42,7 +43,8 @@ class DateTimeI18NBehavior  extends CActiveRecordBehavior
 		}
 
 		foreach ($this->extra_date_field as $columnName) {
-			if (!strlen($origin->$columnName)) { 
+			if (!strlen($origin->$columnName)) {
+				$origin->$columnName = null;			 
 				continue;
 			}
 						
