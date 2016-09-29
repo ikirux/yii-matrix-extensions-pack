@@ -114,12 +114,14 @@ class TypeAhead extends CInputWidget
         $clientScript = Yii::app()->getClientScript();
 		$options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
 
-        if (empty($url)) {
-            $url = explode('/', Yii::app()->request->url);
-            array_pop($url);            
+        if (empty($this->url)) {
+            $this->url = explode('/', Yii::app()->request->url);
+        } else {
+            $this->url = explode('/', $this->url);
         }
         
-        $urlForAction = implode('/', $url);
+        array_pop($this->url);
+        $urlForAction = implode('/', $this->url);     
        
         $relatedModel = key($this->related);
         $relatedAttribute = current($this->related);
