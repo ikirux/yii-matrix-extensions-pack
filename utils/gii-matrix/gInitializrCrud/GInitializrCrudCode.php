@@ -297,7 +297,7 @@ _TAB_]); ?>";
 
     public function normalizeModelName($modelName)
     {
-        $tmpArray = split('_', $modelName);
+        $tmpArray = str_split('_', $modelName);
         array_walk($tmpArray, function(&$item, $key) {
             $item = ucwords($item);
         });
@@ -307,7 +307,7 @@ _TAB_]); ?>";
 
     public function normalizeRelationName($relationName)
     {
-        $tmpArray = split('_', $relationName);
+        $tmpArray = str_split('_', $relationName);
         array_walk($tmpArray, function(&$item, $key) {
             if ($key != 0) {
                 $item = ucwords($item);    
