@@ -42,6 +42,11 @@ class TypeAhead extends CInputWidget
     * @var string
     */
     public $action = 'getJson';
+
+    /**
+    * @var string
+    */
+    public $url = '';    
     
 	/**
 	 * Initializes the widget.
@@ -109,9 +114,14 @@ class TypeAhead extends CInputWidget
         $clientScript = Yii::app()->getClientScript();
 		$options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
 
-        $url = explode('/', Yii::app()->request->url);
-        array_pop($url);
-        $urlForAction = implode('/', $url);
+        if (empty($this->url)) {
+            $this->url = explode('/', Yii::app()->request->url);
+        } else {
+            $this->url = explode('/', $this->url);
+        }
+        
+        array_pop($this->url);
+        $urlForAction = implode('/', $this->url);     
        
         $relatedModel = key($this->related);
         $relatedAttribute = current($this->related);

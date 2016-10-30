@@ -60,7 +60,7 @@ class User extends CActiveRecord
 			['status', 'in', 'range' => [self::STATUS_NOACTIVE, self::STATUS_ACTIVE, self::STATUS_BANNED]],
 			['superuser', 'in', 'range' => [0, 1]],
             ['create_at', 'default', 'value' => date('Y-m-d H:i:s'), 'setOnEmpty' => true, 'on' => 'insert'],
-            ['lastvisit_at', 'default', 'value' => '0000-00-00 00:00:00', 'setOnEmpty' => true, 'on' => 'insert'],
+            ['lastvisit_at', 'default', 'value' => null, 'setOnEmpty' => true, 'on' => 'insert'],
 			['username, email, superuser, status', 'required'],
 			['superuser, status', 'numerical', 'integerOnly' => true],
 			['id, username, password, email, activkey, create_at, lastvisit_at, superuser, status', 'safe', 'on' => 'search'],
