@@ -38,6 +38,8 @@ class DatePickerControl extends CInputWidget
 	 */
 	public $triggerEvents = [];
 
+	public $controlGroup = true;
+
 	/**
 	 * @var string[] call the specified methods
 	 * 
@@ -97,8 +99,12 @@ class DatePickerControl extends CInputWidget
 			$this->registerClientScript($idEmbeddedContainer);
 		} else { // default 'text'
 			$classErrorDiv = ($error = $this->model->getError($this->attribute)) ? 'has-error' : '' ;
-			echo CHtml::tag('div', ['class' => 'form-group ' . $classErrorDiv], false, false);
-			echo CHtml::activeLabel($this->model, $this->attribute, ['class' => 'control-label', 'required' => $required]);
+
+			if ($this->controlGroup) {
+				echo CHtml::tag('div', ['class' => 'form-group ' . $classErrorDiv], false, false);
+				echo CHtml::activeLabel($this->model, $this->attribute, ['class' => 'control-label', 'required' => $required]);				
+			}
+
 			echo CHtml::tag('div', [], false, false);
 			echo CHtml::activeTextField($this->model, $this->attribute, [
 				'class' => 'form-control', 
@@ -108,7 +114,11 @@ class DatePickerControl extends CInputWidget
 			]);
 			if (!empty($classErrorDiv)) { echo CHtml::tag('p', ['class' => 'help-block'], $error); }
 			echo CHtml::closeTag('div');
-			echo CHtml::closeTag('div');
+
+			if ($this->controlGroup) {
+				echo CHtml::closeTag('div');
+			}
+				
 			$this->registerClientScript($id);
 		}
 	}
