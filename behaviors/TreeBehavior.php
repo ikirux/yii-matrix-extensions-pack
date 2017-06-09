@@ -27,14 +27,20 @@ class TreeBehavior extends CBehavior
 		return $derecha + 1;
 	}
 
-	public function getHeader()
+	public function getHeaders()
 	{
 		$tableName = $this->owner->tableName();		
 		$command = Yii::app()->db->createCommand("SELECT id FROM {$tableName} WHERE {$this->treeField} IS NULL");
 		$dataReader = $command->query();
 
-		$row = $dataReader->read();
-		return $row['id'];
+		$rows = $dataReader->readAll();
+
+		$ids = [];
+		foreach ($rows as $row) {
+			$ids[] = $row['id'];
+		}
+
+		return $ids;
 	}
 
 	public function getPath()
