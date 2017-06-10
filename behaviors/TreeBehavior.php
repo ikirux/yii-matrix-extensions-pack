@@ -8,7 +8,6 @@ class TreeBehavior extends CBehavior
 	{
 		$tableName = $this->owner->tableName();
 		$derecha = $izquierda + 1;
-
 		$command = Yii::app()->db->createCommand("SELECT id FROM {$tableName} WHERE {$this->treeField}=:parentId");
 		$command->bindParam(":parentId", $parentId, PDO::PARAM_INT);
 
@@ -46,7 +45,17 @@ class TreeBehavior extends CBehavior
 	public function getPath()
 	{
 		$tableName = $this->owner->tableName();		
-		$command = Yii::app()->db->createCommand("SELECT nombre FROM {$tableName} WHERE izquierda < {$this->owner->izquierda} AND derecha > {$this->owner->derecha} ORDER BY izquierda ASC");
+		$command = Yii::app()->db->createCommand("
+			SELECT 
+				nombre 
+			FROM 
+				{$tableName} 
+			WHERE 
+				tree_id = {$this->owner->tree_id} AND
+				izquierda < {$this->owner->izquierda} AND 
+				derecha > {$this->owner->derecha}
+			ORDER BY 
+				izquierda ASC");
 		$dataReader = $command->query();
 
 		return $dataReader;
