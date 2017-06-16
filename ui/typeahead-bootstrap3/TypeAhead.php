@@ -22,6 +22,11 @@ class TypeAhead extends CInputWidget
 	 * @var array the options for the Bootstrap JavaScript plugin.
 	 */
 	public $options = [];
+
+	/**
+	 * @var array the options for the input control
+	 */
+	public $fieldOptions = [];    
     
 	/**
 	 * @var string[] the JavaScript models related.
@@ -60,6 +65,14 @@ class TypeAhead extends CInputWidget
 		if (!isset($this->options['limit'])) {
 			$this->options['limit'] = 5;
 		} 
+
+		if (!isset($this->fieldOptions['class'])) {
+			$this->fieldOptions['class'] = 'form-control';
+		} 
+
+		if (!isset($this->fieldOptions['placeholder'])) {
+			$this->fieldOptions['placeholder'] = $this->model->getAttributeLabel($this->attribute);
+		}         
 	}
 
     /**
@@ -82,7 +95,7 @@ class TypeAhead extends CInputWidget
         echo CHtml::tag('div', ['class' => 'form-group ' . $classErrorDiv], false, false);
         echo CHtml::activeLabel($this->model, $this->attribute, ['class' => 'control-label', 'required' => $required]);
         echo CHtml::tag('div', [], false, false);
-        echo CHtml::activeTextField($this->model, $this->attribute, ['class' => 'form-control', 'placeholder' => $this->model->getAttributeLabel($this->attribute)]);
+        echo CHtml::activeTextField($this->model, $this->attribute, ['class' => $this->fieldOptions['class'], 'placeholder' => $this->fieldOptions['placeholder']]);
         if (!empty($classErrorDiv)) { echo CHtml::tag('p', ['class' => 'help-block'], $error); }
         echo CHtml::closeTag('div');
         echo CHtml::closeTag('div');
