@@ -73,6 +73,10 @@ class Dropzone extends CWidget {
         ], $this->options);
 
         $this->registerClientScript($options);
+
+        // Si se produjo un error y hay archivos temporales cargados en la sesion
+        // Los mostramos en el input del archivo
+        $this->loadPreviousFiles();
     }
 
     /**
@@ -93,7 +97,9 @@ class Dropzone extends CWidget {
     protected function registerClientScript($options)
     {
         $options = CJavaScript::encode($options);
-        $script = "Dropzone.options.$this->idDiv = {$options}";
+        $script = "Dropzone.autoDiscover = false;"
+                . "var dropzones = dropzones || [];"
+                . "dropzones['$this->idDiv'] = new Dropzone('#$this->idDiv', $options);";
 
         $cs = Yii::app()->clientScript;
         if (!isset($cs->packages[self::PACKAGE_ID])) {
@@ -113,5 +119,26 @@ class Dropzone extends CWidget {
         }
         $cs->registerPackage(self::PACKAGE_ID);
         $cs->registerScript(__CLASS__ . '#' . $this->id, $script, CClientScript::POS_END);
+    }
+
+    protected function loadPreviousFiles()
+    {
+		if (Yii::app()->user->hasState('MatrixUploadFiles')) {
+            $files = Yii::app()->user->getState('MatrixUploadFiles');
+            if (isset($files[$this->attribute])) {
+                // Base on https://github.com/enyo/dropzone/wiki/FAQ#how-to-show-files-already-stored-on-server
+                $script = "
+                // Create the mock file:
+                var mockFile = { name: '{$files[$this->attribute]['fileName']}', size: {$files[$this->attribute]['size']} };
+
+                // Call the default addedfile event handler
+                dropzones['$this->idDiv'].emit('addedfile', mockFile);
+
+                // Make sure that there is no progress bar, etc...
+                dropzones['$this->idDiv'].emit('complete', mockFile);";
+                $cs = Yii::app()->clientScript;
+                $cs->registerScript(__CLASS__ . '#' . $this->id . '_previous_files', $script, CClientScript::POS_END);
+            }
+        } 
     }
 }
