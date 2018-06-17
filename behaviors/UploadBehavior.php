@@ -31,6 +31,11 @@ class UploadBehavior extends CActiveRecordBehavior {
 
 	public function beforeSave($event)
 	{
+		$this->populateFields();
+	}
+
+	public function populateFields()
+	{
 		// Si se han subido archivos
 		if (Yii::app()->user->hasState('MatrixUploadFiles')) {
 			// Guardamos los valores de uploads 
