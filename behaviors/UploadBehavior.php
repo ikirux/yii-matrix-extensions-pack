@@ -64,6 +64,11 @@ class UploadBehavior extends CActiveRecordBehavior {
 
 	public function afterSave($event)
 	{	
+		$this->moveUploadedFilesToFinalDestination($event);
+	}	
+
+	public function moveUploadedFilesToFinalDestination($event = null)
+	{
 		// Si se han subido archivos
 		if (Yii::app()->user->hasState('MatrixUploadFiles')) {		
 			$userFiles = Yii::app()->user->getState('MatrixUploadFiles');
@@ -72,7 +77,19 @@ class UploadBehavior extends CActiveRecordBehavior {
 			foreach ($userFiles as $userFile) {
 				$temporalFile = $userFile["temporalPath"] . $userFile['fileInternalName'];
 				if (is_file($temporalFile)) {
-					if ($this->beforeUpload($event, $temporalFile)) {
+					if (!is_null($event)) {
+						if ($this->beforeUpload($event, $temporalFile)) {
+							$finalFile = Yii::app()->getBasePath() . $this->owner->{$userFile['fileInternalAttribute']};
+							if (rename($temporalFile, $finalFile)) {
+								chmod(Yii::app()->getBasePath() . $this->owner->{$userFile['fileInternalAttribute']} , 0777);
+								$this->afterUpload($event, $finalFile);
+							} else {
+								throw new Exception('Could not save file');
+							}
+						} else {
+							throw new Exception('Could not execute beforeUpload');
+						}
+					} else {
 						$finalFile = Yii::app()->getBasePath() . $this->owner->{$userFile['fileInternalAttribute']};
 						if (rename($temporalFile, $finalFile)) {
 							chmod(Yii::app()->getBasePath() . $this->owner->{$userFile['fileInternalAttribute']} , 0777);
@@ -80,8 +97,6 @@ class UploadBehavior extends CActiveRecordBehavior {
 						} else {
 							throw new Exception('Could not save file');
 						}
-					} else {
-						throw new Exception('Could not execute beforeUpload');
 					}
 				} else {
 					throw new Exception('Could not save file, there is no such file');
@@ -98,8 +113,8 @@ class UploadBehavior extends CActiveRecordBehavior {
 		    		}
 		    	}
 			}			
-		}	
-	}	
+		}
+	}
 
 	public function beforeDelete($event)
     {
