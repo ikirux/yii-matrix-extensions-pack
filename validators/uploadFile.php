@@ -39,6 +39,10 @@ class uploadFile extends CValidator
             $this->maxFileSize = Yii::app()->params['MAX_UPLOAD_FILE'];
         }
 
+        if ($this->allowType === ALLOW_ALL) {
+            return true;
+        }        
+
         $mymeTypes = [];
         $extensions = [];
         if ($this->allowType === 1) {
@@ -59,10 +63,7 @@ class uploadFile extends CValidator
         } elseif ($this->allowType === 6) {
 			$mymeTypes = array_merge($this->mymeTypes['DOC'], $this->mymeTypes['IMAGE']);
 			$extensions = array_merge($this->extensions['DOC'], $this->extensions['IMAGE']);				
-        } elseif ($this->allowType === 7) {
-			$mymeTypes = array_merge($this->mymeTypes['PDF'], $this->mymeTypes['DOC'], $this->mymeTypes['IMAGE']);
-			$extensions = array_merge($this->extensions['PDF'], $this->extensions['DOC'], $this->extensions['IMAGE']);	
-        }
+        } 
 
         if ($file->getSize() > $this->maxFileSize) {
         	$this->addError($object, $attribute, 'El archivo supera el tamaño máximo (' . ($this->maxFileSize / (1024 * 1000)) . 'MB)');
